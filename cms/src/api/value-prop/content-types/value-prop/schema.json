@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "value_props",
+  "info": {
+    "singularName": "value-prop",
+    "pluralName": "value-props",
+    "displayName": "Value Proposition",
+    "description": "One of the homepage feature/value blocks (e.g. Affordable housing development)."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "order": {
+      "type": "integer",
+      "default": 0
+    },
+    "icon": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}

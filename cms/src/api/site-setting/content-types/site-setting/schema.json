@@ -1,0 +1,68 @@
+{
+  "kind": "singleType",
+  "collectionName": "site_settings",
+  "info": {
+    "singularName": "site-setting",
+    "pluralName": "site-settings",
+    "displayName": "Site Settings",
+    "description": "Global, single-instance content: hero copy, contact details, footer credit, registration popup."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "siteName": {
+      "type": "string",
+      "default": "Dreamspace Realty"
+    },
+    "heroHeadline": {
+      "type": "string",
+      "required": true
+    },
+    "heroSubheadline": {
+      "type": "string"
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "phone": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "secondaryEmail": {
+      "type": "email"
+    },
+    "registerCtaLabel": {
+      "type": "string",
+      "default": "Register from home!"
+    },
+    "appointmentCtaLabel": {
+      "type": "string",
+      "default": "Make an appointment now!"
+    },
+    "popupEnabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "popupHeadline": {
+      "type": "string",
+      "default": "We are running a limited time registration. Hurry up!"
+    },
+    "footerCredit": {
+      "type": "string",
+      "default": "buildwithanahom"
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}

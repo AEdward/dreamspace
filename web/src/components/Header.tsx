@@ -1,0 +1,84 @@
+import Link from "next/link";
+import Image from "next/image";
+import type { SiteSettings } from "@/lib/types";
+import { mediaUrl } from "@/lib/strapi";
+
+const NAV_LINKS = [
+  { href: "/", label: "Home page" },
+  { href: "/registration", label: "Register from anywhere" },
+  { href: "/about-us", label: "About us" },
+  { href: "/harmony-builders", label: "About Harmony Builders" },
+  { href: "/news", label: "News" },
+  { href: "/contact-us", label: "Talk to us" },
+];
+
+export function Header({ settings }: { settings: SiteSettings | null }) {
+  const logoUrl = mediaUrl(settings?.logo?.url);
+
+  return (
+    <header className="sticky top-0 z-50 border-b border-slate-100 bg-white/95 backdrop-blur">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-3">
+        <Link href="/" className="flex shrink-0 items-center gap-2">
+          {logoUrl ? (
+            <Image
+              src={logoUrl}
+              alt={settings?.siteName ?? "Dreamspace Realty"}
+              width={220}
+              height={60}
+              className="h-9 w-auto"
+              priority
+            />
+          ) : (
+            <span className="text-xl font-bold text-[#07283b]">Dreamspace Realty</span>
+          )}
+        </Link>
+
+        <nav className="hidden md:block">
+          <ul className="flex items-center gap-6 text-sm font-medium text-[#07283b]">
+            {NAV_LINKS.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} className="transition-colors hover:text-[#f4600a]">
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        {settings?.phone && (
+          <a
+            href={`tel:${settings.phone.replace(/\s+/g, "")}`}
+            className="hidden shrink-0 items-center rounded-full bg-[#f4600a] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#d8540a] sm:inline-flex"
+          >
+            Call {settings.phone}
+          </a>
+        )}
+
+        <details className="group relative md:hidden">
+          <summary className="flex h-9 w-9 cursor-pointer list-none items-center justify-center rounded-md border border-slate-200 text-[#07283b] [&::-webkit-details-marker]:hidden">
+            <span className="sr-only">Menu</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-5 w-5">
+              <path strokeLinecap="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </summary>
+          <ul className="absolute right-0 top-12 z-50 w-64 rounded-xl border border-slate-200 bg-white p-2 text-sm font-medium text-[#07283b] shadow-lg">
+            {NAV_LINKS.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} className="block rounded-lg px-3 py-2 hover:bg-slate-50">
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+            {settings?.phone && (
+              <li className="mt-1 border-t border-slate-100 pt-1">
+                <a href={`tel:${settings.phone.replace(/\s+/g, "")}`} className="block rounded-lg px-3 py-2 text-[#f4600a] hover:bg-slate-50">
+                  Call {settings.phone}
+                </a>
+              </li>
+            )}
+          </ul>
+        </details>
+      </div>
+    </header>
+  );
+}

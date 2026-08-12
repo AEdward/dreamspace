@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "offices",
+  "info": {
+    "singularName": "office",
+    "pluralName": "offices",
+    "displayName": "Office / Location",
+    "description": "A physical office or branch, shown in the footer with its address and phone numbers."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "order": {
+      "type": "integer",
+      "default": 0
+    },
+    "address": {
+      "type": "text",
+      "required": true
+    },
+    "phones": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.phone-number"
+    },
+    "isConstructionSite": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

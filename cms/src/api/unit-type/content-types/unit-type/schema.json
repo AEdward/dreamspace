@@ -1,0 +1,69 @@
+{
+  "kind": "collectionType",
+  "collectionName": "unit_types",
+  "info": {
+    "singularName": "unit-type",
+    "pluralName": "unit-types",
+    "displayName": "Unit Type",
+    "description": "A housing unit type shown in the pricing table (e.g. 1 Bed Room, 2 Bed Room)."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "order": {
+      "type": "integer",
+      "default": 0
+    },
+    "sqm": {
+      "type": "decimal",
+      "required": true
+    },
+    "bedrooms": {
+      "type": "integer",
+      "required": true
+    },
+    "bathrooms": {
+      "type": "integer",
+      "required": true
+    },
+    "downPayment": {
+      "type": "decimal",
+      "required": true
+    },
+    "serviceFee": {
+      "type": "decimal",
+      "required": true
+    },
+    "monthlySavings": {
+      "type": "decimal",
+      "required": true
+    },
+    "monthlyServiceFee": {
+      "type": "decimal",
+      "required": true
+    },
+    "finalServiceFeeAfterDraw": {
+      "type": "decimal",
+      "required": true
+    },
+    "totalConstructionCost": {
+      "type": "decimal",
+      "required": true
+    },
+    "currency": {
+      "type": "string",
+      "default": "Birr"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}

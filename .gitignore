@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Env files (never commit real secrets)
+.env
+.env.local
+.env.*.local
+
+# Strapi
+cms/dist/
+cms/build/
+cms/.tmp/
+cms/public/uploads/*
+!cms/public/uploads/.gitkeep
+
+# Next.js
+web/.next/
+web/out/
+
+# OS / editor
+.DS_Store
+*.log
