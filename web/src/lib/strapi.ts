@@ -24,6 +24,19 @@ async function get<T>(path: string): Promise<T> {
   return res.json();
 }
 
+/**
+ * The CMS may be temporarily unreachable (deploy in progress, restart, etc.)
+ * — pages should degrade gracefully instead of failing to build/render.
+ */
+async function getListSafely<T>(path: string): Promise<T[]> {
+  try {
+    const { data } = await get<StrapiListResponse<T>>(path);
+    return data;
+  } catch {
+    return [];
+  }
+}
+
 export async function getSiteSettings(): Promise<SiteSettings | null> {
   try {
     const { data } = await get<StrapiSingleResponse<SiteSettings>>("/site-setting?populate=*");
@@ -35,35 +48,32 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
 }
 
 export async function getValueProps(): Promise<ValueProp[]> {
-  const { data } = await get<StrapiListResponse<ValueProp>>("/value-props?populate=*&sort=order:asc");
-  return data;
+  return getListSafely<ValueProp>("/value-props?populate=*&sort=order:asc");
 }
 
 export async function getUnitTypes(): Promise<UnitType[]> {
-  const { data } = await get<StrapiListResponse<UnitType>>("/unit-types?populate=*&sort=order:asc");
-  return data;
+  return getListSafely<UnitType>("/unit-types?populate=*&sort=order:asc");
 }
 
 export async function getOffices(): Promise<Office[]> {
-  const { data } = await get<StrapiListResponse<Office>>("/offices?populate=*&sort=order:asc");
-  return data;
+  return getListSafely<Office>("/offices?populate=*&sort=order:asc");
 }
 
 export async function getPartners(): Promise<Partner[]> {
-  const { data } = await get<StrapiListResponse<Partner>>("/partners?populate=*&sort=order:asc");
-  return data;
+  return getListSafely<Partner>("/partners?populate=*&sort=order:asc");
 }
 
 export async function getPosts(limit = 3): Promise<Post[]> {
-  const { data } = await get<StrapiListResponse<Post>>(
-    `/posts?populate=*&sort=publishedDate:desc&pagination[limit]=${limit}`
-  );
-  return data;
+  return getListSafely<Post>(`/posts?populate=*&sort=publishedDate:desc&pagination[limit]=${limit}`);
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
-  const { data } = await get<StrapiListResponse<Post>>(
-    `/posts?filters[slug][$eq]=${encodeURIComponent(slug)}&populate=*`
-  );
-  return data[0] ?? null;
+  try {
+    const { data } = await get<StrapiListResponse<Post>>(
+      `/posts?filters[slug][$eq]=${encodeURIComponent(slug)}&populate=*`
+    );
+    return data[0] ?? null;
+  } catch {
+    return null;
+  }
 }
