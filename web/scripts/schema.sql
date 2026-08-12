@@ -1,0 +1,78 @@
+CREATE TABLE IF NOT EXISTS site_settings (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  site_name VARCHAR(255) NOT NULL DEFAULT 'Dreamspace Realty',
+  hero_headline VARCHAR(255) NOT NULL,
+  hero_subheadline VARCHAR(255),
+  hero_image_url VARCHAR(500),
+  logo_url VARCHAR(500),
+  phone VARCHAR(50) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  secondary_email VARCHAR(255),
+  register_cta_label VARCHAR(255) DEFAULT 'Register from home!',
+  appointment_cta_label VARCHAR(255) DEFAULT 'Make an appointment now!',
+  popup_enabled BOOLEAN NOT NULL DEFAULT 1,
+  popup_headline VARCHAR(255) DEFAULT 'We are running a limited time registration. Hurry up!',
+  footer_credit VARCHAR(255) DEFAULT 'buildwithanahom',
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS value_props (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL,
+  description TEXT NOT NULL,
+  sort_order INT NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS unit_types (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL,
+  sort_order INT NOT NULL DEFAULT 0,
+  sqm DECIMAL(10,2) NOT NULL,
+  bedrooms INT NOT NULL,
+  bathrooms INT NOT NULL,
+  down_payment DECIMAL(14,2) NOT NULL,
+  service_fee DECIMAL(14,2) NOT NULL,
+  monthly_savings DECIMAL(14,2) NOT NULL,
+  monthly_service_fee DECIMAL(14,2) NOT NULL,
+  final_service_fee_after_draw DECIMAL(14,2) NOT NULL,
+  total_construction_cost DECIMAL(14,2) NOT NULL,
+  currency VARCHAR(20) NOT NULL DEFAULT 'Birr',
+  image_url VARCHAR(500)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS offices (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL,
+  sort_order INT NOT NULL DEFAULT 0,
+  address TEXT NOT NULL,
+  is_construction_site BOOLEAN NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS office_phones (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  office_id INT NOT NULL,
+  label VARCHAR(100),
+  number VARCHAR(50) NOT NULL,
+  sort_order INT NOT NULL DEFAULT 0,
+  FOREIGN KEY (office_id) REFERENCES offices(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS partners (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL,
+  sort_order INT NOT NULL DEFAULT 0,
+  logo_url VARCHAR(500),
+  url VARCHAR(500)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS posts (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL,
+  slug VARCHAR(255) NOT NULL UNIQUE,
+  excerpt TEXT,
+  content LONGTEXT NOT NULL,
+  cover_image_url VARCHAR(500),
+  author VARCHAR(255) NOT NULL DEFAULT 'admin',
+  category VARCHAR(100) NOT NULL DEFAULT 'Uncategorized',
+  published_date DATE NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

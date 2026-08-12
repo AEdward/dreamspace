@@ -1,7 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
 import type { SiteSettings } from "@/lib/types";
-import { mediaUrl } from "@/lib/strapi";
 
 const NAV_LINKS = [
   { href: "/", label: "Home page" },
@@ -13,21 +11,15 @@ const NAV_LINKS = [
 ];
 
 export function Header({ settings }: { settings: SiteSettings | null }) {
-  const logoUrl = mediaUrl(settings?.logo?.url);
+  const logoUrl = settings?.logoUrl;
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-100 bg-white/95 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-3">
         <Link href="/" className="flex shrink-0 items-center gap-2">
           {logoUrl ? (
-            <Image
-              src={logoUrl}
-              alt={settings?.siteName ?? "Dreamspace Realty"}
-              width={220}
-              height={60}
-              className="h-9 w-auto"
-              priority
-            />
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={logoUrl} alt={settings?.siteName ?? "Dreamspace Realty"} className="h-9 w-auto" />
           ) : (
             <span className="text-xl font-bold text-[#07283b]">Dreamspace Realty</span>
           )}

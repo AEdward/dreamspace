@@ -1,6 +1,4 @@
-import Image from "next/image";
 import type { Partner } from "@/lib/types";
-import { mediaUrl } from "@/lib/strapi";
 
 export function PartnersStrip({ partners }: { partners: Partner[] }) {
   if (partners.length === 0) return null;
@@ -13,23 +11,21 @@ export function PartnersStrip({ partners }: { partners: Partner[] }) {
         </h2>
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-10">
-          {partners.map((partner) => {
-            const logo = mediaUrl(partner.logo?.url);
-            return logo ? (
-              <Image
+          {partners.map((partner) =>
+            partner.logoUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
                 key={partner.id}
-                src={logo}
+                src={partner.logoUrl}
                 alt={partner.name}
-                width={140}
-                height={60}
                 className="h-12 w-auto object-contain grayscale"
               />
             ) : (
               <span key={partner.id} className="text-lg font-semibold text-[#07283b]">
                 {partner.name}
               </span>
-            );
-          })}
+            )
+          )}
         </div>
       </div>
     </section>

@@ -3,7 +3,9 @@ import { ValueProps } from "@/components/ValueProps";
 import { PricingTable } from "@/components/PricingTable";
 import { NewsSection } from "@/components/NewsSection";
 import { PartnersStrip } from "@/components/PartnersStrip";
-import { getSiteSettings, getValueProps, getUnitTypes, getPosts, getPartners } from "@/lib/strapi";
+import { getSiteSettings, getValueProps, getUnitTypes, getPosts, getPartners } from "@/lib/data";
+
+export const revalidate = 60;
 
 export default async function Home() {
   const [settings, valueProps, unitTypes, posts, partners] = await Promise.all([

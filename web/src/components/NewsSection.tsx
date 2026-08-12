@@ -1,7 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
 import type { Post } from "@/lib/types";
-import { mediaUrl } from "@/lib/strapi";
 
 export function NewsSection({ posts, heading = "Latest news" }: { posts: Post[]; heading?: string }) {
   if (posts.length === 0) return null;
@@ -12,7 +10,7 @@ export function NewsSection({ posts, heading = "Latest news" }: { posts: Post[];
 
       <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {posts.map((post) => {
-          const cover = mediaUrl(post.coverImage?.url);
+          const cover = post.coverImageUrl;
           return (
             <Link
               key={post.id}
@@ -21,11 +19,11 @@ export function NewsSection({ posts, heading = "Latest news" }: { posts: Post[];
             >
               {cover && (
                 <div className="relative h-44 w-full overflow-hidden bg-slate-100">
-                  <Image
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
                     src={cover}
                     alt={post.title}
-                    fill
-                    className="object-cover transition-transform group-hover:scale-105"
+                    className="h-full w-full object-cover transition-transform group-hover:scale-105"
                   />
                 </div>
               )}

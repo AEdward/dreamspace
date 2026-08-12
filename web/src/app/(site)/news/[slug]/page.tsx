@@ -1,6 +1,7 @@
-import Image from "next/image";
 import { notFound } from "next/navigation";
-import { getPostBySlug, mediaUrl } from "@/lib/strapi";
+import { getPostBySlug } from "@/lib/data";
+
+export const revalidate = 60;
 
 export default async function NewsPostPage({ params }: PageProps<"/news/[slug]">) {
   const { slug } = await params;
@@ -9,8 +10,6 @@ export default async function NewsPostPage({ params }: PageProps<"/news/[slug]">
   if (!post) {
     notFound();
   }
-
-  const cover = mediaUrl(post.coverImage?.url);
 
   return (
     <article className="mx-auto max-w-3xl px-6 py-16">
@@ -24,9 +23,10 @@ export default async function NewsPostPage({ params }: PageProps<"/news/[slug]">
         })}
       </p>
 
-      {cover && (
+      {post.coverImageUrl && (
         <div className="relative mt-8 h-72 w-full overflow-hidden rounded-2xl bg-slate-100 sm:h-96">
-          <Image src={cover} alt={post.title} fill className="object-cover" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={post.coverImageUrl} alt={post.title} className="h-full w-full object-cover" />
         </div>
       )}
 

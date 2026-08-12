@@ -1,13 +1,12 @@
-import Image from "next/image";
 import type { SiteSettings } from "@/lib/types";
-import { mediaUrl } from "@/lib/strapi";
 
 export function Hero({ settings }: { settings: SiteSettings | null }) {
-  const heroUrl = mediaUrl(settings?.heroImage?.url) ?? "/brand/hero.jpg";
+  const heroUrl = settings?.heroImageUrl ?? "/brand/hero.jpg";
 
   return (
     <section className="relative isolate flex min-h-[70vh] items-center overflow-hidden bg-[#07283b] text-white">
-      <Image src={heroUrl} alt="" fill priority className="object-cover opacity-50" />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={heroUrl} alt="" className="absolute inset-0 h-full w-full object-cover opacity-50" />
       <div className="absolute inset-0 bg-gradient-to-t from-[#07283b] via-[#07283b]/70 to-[#07283b]/20" />
 
       <div className="relative mx-auto w-full max-w-7xl px-6 py-24">
