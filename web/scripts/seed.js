@@ -27,7 +27,7 @@ async function main() {
         "+251 90 396 8896",
         "info@dreamspacerbg.com",
         "office@dreamspacerbg.com",
-        "Booking",
+        "Book Now",
         "Make an appointment now!",
         1,
         "We are running a limited time registration. Hurry up!",

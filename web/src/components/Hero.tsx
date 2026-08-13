@@ -50,7 +50,7 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
               onClick={() => setBookingOpen(true)}
               className="rounded-full bg-[#f4600a] px-7 py-3.5 font-semibold shadow-lg shadow-[#f4600a]/20 transition-all hover:-translate-y-0.5 hover:bg-[#d8540a] hover:shadow-xl hover:shadow-[#f4600a]/30"
             >
-              {settings?.registerCtaLabel ?? "Booking"}
+              {settings?.registerCtaLabel ?? "Book Now"}
             </button>
             {settings?.phone && (
               <a
@@ -61,24 +61,6 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
               </a>
             )}
           </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.7, delay: 0.35 }}
-            className="mt-7 text-sm text-white/70"
-          >
-            {settings?.appointmentCtaLabel ?? "Make an appointment now!"}
-            {settings?.email && (
-              <>
-                {" "}
-                &middot;{" "}
-                <a href={`mailto:${settings.email}`} className="underline underline-offset-2">
-                  {settings.email}
-                </a>
-              </>
-            )}
-          </motion.p>
         </div>
 
         <motion.div

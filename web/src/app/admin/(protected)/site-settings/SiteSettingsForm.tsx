@@ -70,16 +70,10 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings | null }
         <input name="secondary_email" type="email" defaultValue={settings?.secondaryEmail ?? ""} className={inputClass} />
       </label>
 
-      <div className="grid grid-cols-2 gap-4">
-        <label className={labelClass}>
-          Booking button label
-          <input name="register_cta_label" defaultValue={settings?.registerCtaLabel ?? ""} className={inputClass} />
-        </label>
-        <label className={labelClass}>
-          Appointment CTA label
-          <input name="appointment_cta_label" defaultValue={settings?.appointmentCtaLabel ?? ""} className={inputClass} />
-        </label>
-      </div>
+      <label className={labelClass}>
+        Booking button label
+        <input name="register_cta_label" defaultValue={settings?.registerCtaLabel ?? ""} className={inputClass} />
+      </label>
 
       <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
         <input type="checkbox" name="popup_enabled" defaultChecked={settings?.popupEnabled ?? true} className="h-4 w-4" />

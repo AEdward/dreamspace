@@ -18,7 +18,6 @@ export async function updateSiteSettings(_prevState: string | null, formData: Fo
     get("email"),
     get("secondary_email") || null,
     get("register_cta_label"),
-    get("appointment_cta_label"),
     formData.get("popup_enabled") ? 1 : 0,
     get("popup_headline"),
     get("footer_credit"),
@@ -42,7 +41,7 @@ export async function updateSiteSettings(_prevState: string | null, formData: Fo
     await query(
       `UPDATE site_settings SET
         site_name = ?, hero_headline = ?, hero_subheadline = ?, hero_image_url = ?, logo_url = ?,
-        phone = ?, email = ?, secondary_email = ?, register_cta_label = ?, appointment_cta_label = ?,
+        phone = ?, email = ?, secondary_email = ?, register_cta_label = ?,
         popup_enabled = ?, popup_headline = ?, footer_credit = ?,
         stats_enabled = ?, stat1_value = ?, stat1_label = ?, stat2_value = ?, stat2_label = ?,
         stat3_value = ?, stat3_label = ?, stat4_value = ?, stat4_label = ?, maintenance_mode = ?,
@@ -54,10 +53,10 @@ export async function updateSiteSettings(_prevState: string | null, formData: Fo
     await query(
       `INSERT INTO site_settings
         (site_name, hero_headline, hero_subheadline, hero_image_url, logo_url, phone, email, secondary_email,
-         register_cta_label, appointment_cta_label, popup_enabled, popup_headline, footer_credit,
+         register_cta_label, popup_enabled, popup_headline, footer_credit,
          stats_enabled, stat1_value, stat1_label, stat2_value, stat2_label, stat3_value, stat3_label,
          stat4_value, stat4_label, maintenance_mode, about_heading, about_body, contact_heading, contact_intro)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       values
     );
   }

@@ -8,7 +8,6 @@ export interface SiteSettings {
   email: string;
   secondaryEmail: string | null;
   registerCtaLabel: string;
-  appointmentCtaLabel: string;
   popupEnabled: boolean;
   popupHeadline: string;
   footerCredit: string;

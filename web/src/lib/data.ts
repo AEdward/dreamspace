@@ -11,7 +11,6 @@ interface SiteSettingsRow {
   email: string;
   secondary_email: string | null;
   register_cta_label: string;
-  appointment_cta_label: string;
   popup_enabled: number;
   popup_headline: string;
   footer_credit: string;
@@ -46,7 +45,6 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
       email: row.email,
       secondaryEmail: row.secondary_email,
       registerCtaLabel: row.register_cta_label,
-      appointmentCtaLabel: row.appointment_cta_label,
       popupEnabled: !!row.popup_enabled,
       popupHeadline: row.popup_headline,
       footerCredit: row.footer_credit,
