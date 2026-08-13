@@ -70,7 +70,7 @@ admin panel (log in with `ADMIN_PASSWORD`).
    `node scripts/seed.js` (first deploy only — it's idempotent but only needs to run once),
    `npm run build`, restart the app.
 4. Point your domain at this single app. **The old `cms.` subdomain / Strapi Node app is no
-   longer needed** — safe to stop and delete once this is confirmed working.
+   longer needed** — safe to stop and delete once this is confirmed working.....
 
 ## What's implemented vs. still needed
 
