@@ -37,7 +37,7 @@ export function PricingTable({ units }: { units: UnitType[] }) {
               className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 transition-shadow hover:shadow-xl"
             >
               <div className="relative h-56 shrink-0 bg-gradient-to-b from-slate-100 to-slate-50">
-                <UnitModelLoader sqm={unit.sqm} bedrooms={unit.bedrooms} bathrooms={unit.bathrooms} />
+                <UnitModelLoader name={unit.name} sqm={unit.sqm} bedrooms={unit.bedrooms} bathrooms={unit.bathrooms} />
               </div>
 
               <div className="flex flex-1 flex-col p-8">
