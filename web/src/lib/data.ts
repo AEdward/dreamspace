@@ -24,6 +24,7 @@ interface SiteSettingsRow {
   stat3_label: string;
   stat4_value: string;
   stat4_label: string;
+  maintenance_mode: number;
 }
 
 export async function getSiteSettings(): Promise<SiteSettings | null> {
@@ -52,6 +53,7 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
         { value: row.stat3_value, label: row.stat3_label },
         { value: row.stat4_value, label: row.stat4_label },
       ],
+      maintenanceMode: !!row.maintenance_mode,
     };
   } catch {
     return null;

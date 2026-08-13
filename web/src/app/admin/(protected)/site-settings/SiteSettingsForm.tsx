@@ -13,6 +13,22 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings | null }
 
   return (
     <form action={formAction} className="mt-6 max-w-2xl space-y-5 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+      <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
+        <label className="flex items-center gap-2 text-sm font-semibold text-amber-900">
+          <input
+            type="checkbox"
+            name="maintenance_mode"
+            defaultChecked={settings?.maintenanceMode ?? false}
+            className="h-4 w-4"
+          />
+          Maintenance mode
+        </label>
+        <p className="mt-1 text-xs text-amber-700">
+          When on, every public page shows a maintenance screen instead of the site. This admin panel stays
+          accessible so you can turn it back off.
+        </p>
+      </div>
+
       <label className={labelClass}>
         Site name
         <input name="site_name" defaultValue={settings?.siteName ?? "Dreamspace Realty"} required className={inputClass} />

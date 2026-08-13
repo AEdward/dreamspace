@@ -14,6 +14,7 @@ export interface SiteSettings {
   footerCredit: string;
   statsEnabled: boolean;
   stats: { value: string; label: string }[];
+  maintenanceMode: boolean;
 }
 
 export interface BankAccount {

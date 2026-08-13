@@ -22,9 +22,11 @@ CREATE TABLE IF NOT EXISTS site_settings (
   stat3_label VARCHAR(255) DEFAULT 'Monthly savings starting from',
   stat4_value VARCHAR(50) DEFAULT 'Birr 139,000',
   stat4_label VARCHAR(255) DEFAULT 'Advance payment starting from',
+  maintenance_mode BOOLEAN NOT NULL DEFAULT 0,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS maintenance_mode BOOLEAN NOT NULL DEFAULT 0;
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS stats_enabled BOOLEAN NOT NULL DEFAULT 1;
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS stat1_value VARCHAR(50) DEFAULT '10,000';
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS stat1_label VARCHAR(255) DEFAULT 'Total subscribers';
