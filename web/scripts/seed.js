@@ -255,6 +255,33 @@ async function main() {
   }
   console.log(`  + partners seeded (${partners.length})`);
 
+  const bankAccounts = [
+    {
+      bank_name: "ጎህ ቤቶች ባንክ",
+      registration_account: "10000005071331",
+      price_account: "1000000510525",
+      sort_order: 1,
+    },
+    {
+      bank_name: "የኢትዮጵያ ንግድ ባንክ",
+      registration_account: "1000713563319",
+      price_account: "1000690236625",
+      sort_order: 2,
+    },
+  ];
+  for (const account of bankAccounts) {
+    const [existing] = await connection.query("SELECT id FROM bank_accounts WHERE bank_name = ?", [
+      account.bank_name,
+    ]);
+    if (existing.length === 0) {
+      await connection.query(
+        "INSERT INTO bank_accounts (bank_name, registration_account, price_account, sort_order) VALUES (?, ?, ?, ?)",
+        [account.bank_name, account.registration_account, account.price_account, account.sort_order]
+      );
+    }
+  }
+  console.log(`  + bank_accounts seeded (${bankAccounts.length})`);
+
   console.log("\nSeed complete.");
   await connection.end();
 }

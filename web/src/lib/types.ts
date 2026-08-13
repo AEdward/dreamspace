@@ -12,6 +12,15 @@ export interface SiteSettings {
   popupEnabled: boolean;
   popupHeadline: string;
   footerCredit: string;
+  statsEnabled: boolean;
+  stats: { value: string; label: string }[];
+}
+
+export interface BankAccount {
+  id: number;
+  bankName: string;
+  registrationAccount: string;
+  priceAccount: string;
 }
 
 export interface ValueProp {

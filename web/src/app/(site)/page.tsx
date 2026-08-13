@@ -1,19 +1,22 @@
 import { Hero } from "@/components/Hero";
 import { ValueProps } from "@/components/ValueProps";
 import { PricingTable } from "@/components/PricingTable";
+import { BankDetails } from "@/components/BankDetails";
+import { StatsSection } from "@/components/StatsSection";
 import { NewsSection } from "@/components/NewsSection";
 import { PartnersStrip } from "@/components/PartnersStrip";
-import { getSiteSettings, getValueProps, getUnitTypes, getPosts, getPartners } from "@/lib/data";
+import { getSiteSettings, getValueProps, getUnitTypes, getPosts, getPartners, getBankAccounts } from "@/lib/data";
 
 export const revalidate = 60;
 
 export default async function Home() {
-  const [settings, valueProps, unitTypes, posts, partners] = await Promise.all([
+  const [settings, valueProps, unitTypes, posts, partners, bankAccounts] = await Promise.all([
     getSiteSettings(),
     getValueProps(),
     getUnitTypes(),
     getPosts(3),
     getPartners(),
+    getBankAccounts(),
   ]);
 
   return (
@@ -21,6 +24,8 @@ export default async function Home() {
       <Hero settings={settings} />
       <ValueProps items={valueProps} />
       <PricingTable units={unitTypes} />
+      <BankDetails accounts={bankAccounts} />
+      {settings?.statsEnabled && <StatsSection stats={settings.stats} />}
       <NewsSection posts={posts} />
       <PartnersStrip partners={partners} />
     </>

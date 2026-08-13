@@ -22,6 +22,15 @@ export async function updateSiteSettings(_prevState: string | null, formData: Fo
     formData.get("popup_enabled") ? 1 : 0,
     get("popup_headline"),
     get("footer_credit"),
+    formData.get("stats_enabled") ? 1 : 0,
+    get("stat1_value"),
+    get("stat1_label"),
+    get("stat2_value"),
+    get("stat2_label"),
+    get("stat3_value"),
+    get("stat3_label"),
+    get("stat4_value"),
+    get("stat4_label"),
   ];
 
   if (existing[0]) {
@@ -29,7 +38,9 @@ export async function updateSiteSettings(_prevState: string | null, formData: Fo
       `UPDATE site_settings SET
         site_name = ?, hero_headline = ?, hero_subheadline = ?, hero_image_url = ?, logo_url = ?,
         phone = ?, email = ?, secondary_email = ?, register_cta_label = ?, appointment_cta_label = ?,
-        popup_enabled = ?, popup_headline = ?, footer_credit = ?
+        popup_enabled = ?, popup_headline = ?, footer_credit = ?,
+        stats_enabled = ?, stat1_value = ?, stat1_label = ?, stat2_value = ?, stat2_label = ?,
+        stat3_value = ?, stat3_label = ?, stat4_value = ?, stat4_label = ?
        WHERE id = ?`,
       [...values, existing[0].id]
     );
@@ -37,8 +48,10 @@ export async function updateSiteSettings(_prevState: string | null, formData: Fo
     await query(
       `INSERT INTO site_settings
         (site_name, hero_headline, hero_subheadline, hero_image_url, logo_url, phone, email, secondary_email,
-         register_cta_label, appointment_cta_label, popup_enabled, popup_headline, footer_credit)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+         register_cta_label, appointment_cta_label, popup_enabled, popup_headline, footer_credit,
+         stats_enabled, stat1_value, stat1_label, stat2_value, stat2_label, stat3_value, stat3_label,
+         stat4_value, stat4_label)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       values
     );
   }

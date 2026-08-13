@@ -13,8 +13,27 @@ CREATE TABLE IF NOT EXISTS site_settings (
   popup_enabled BOOLEAN NOT NULL DEFAULT 1,
   popup_headline VARCHAR(255) DEFAULT 'We are running a limited time registration. Hurry up!',
   footer_credit VARCHAR(255) DEFAULT 'buildwithanahom',
+  stats_enabled BOOLEAN NOT NULL DEFAULT 1,
+  stat1_value VARCHAR(50) DEFAULT '10,000',
+  stat1_label VARCHAR(255) DEFAULT 'Total subscribers',
+  stat2_value VARCHAR(50) DEFAULT '10 years',
+  stat2_label VARCHAR(255) DEFAULT 'When all members become homeowners',
+  stat3_value VARCHAR(50) DEFAULT 'Birr 3,790',
+  stat3_label VARCHAR(255) DEFAULT 'Monthly savings starting from',
+  stat4_value VARCHAR(50) DEFAULT 'Birr 139,000',
+  stat4_label VARCHAR(255) DEFAULT 'Advance payment starting from',
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS stats_enabled BOOLEAN NOT NULL DEFAULT 1;
+ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS stat1_value VARCHAR(50) DEFAULT '10,000';
+ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS stat1_label VARCHAR(255) DEFAULT 'Total subscribers';
+ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS stat2_value VARCHAR(50) DEFAULT '10 years';
+ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS stat2_label VARCHAR(255) DEFAULT 'When all members become homeowners';
+ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS stat3_value VARCHAR(50) DEFAULT 'Birr 3,790';
+ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS stat3_label VARCHAR(255) DEFAULT 'Monthly savings starting from';
+ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS stat4_value VARCHAR(50) DEFAULT 'Birr 139,000';
+ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS stat4_label VARCHAR(255) DEFAULT 'Advance payment starting from';
 
 CREATE TABLE IF NOT EXISTS value_props (
   id INT PRIMARY KEY AUTO_INCREMENT,
@@ -85,4 +104,12 @@ CREATE TABLE IF NOT EXISTS bookings (
   email VARCHAR(255),
   message TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS bank_accounts (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  bank_name VARCHAR(255) NOT NULL,
+  registration_account VARCHAR(100) NOT NULL,
+  price_account VARCHAR(100) NOT NULL,
+  sort_order INT NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

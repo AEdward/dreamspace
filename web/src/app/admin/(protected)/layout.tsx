@@ -6,6 +6,7 @@ const NAV = [
   { href: "/admin/value-props", label: "Value Props" },
   { href: "/admin/unit-types", label: "Unit Types" },
   { href: "/admin/offices", label: "Offices" },
+  { href: "/admin/bank-accounts", label: "Bank Accounts" },
   { href: "/admin/partners", label: "Partners" },
   { href: "/admin/posts", label: "Posts" },
   { href: "/admin/bookings", label: "Bookings & Messages" },

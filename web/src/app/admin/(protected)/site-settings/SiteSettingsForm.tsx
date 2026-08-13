@@ -80,6 +80,38 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings | null }
         <input name="footer_credit" defaultValue={settings?.footerCredit ?? ""} className={inputClass} />
       </label>
 
+      <div className="border-t border-slate-100 pt-5">
+        <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
+          <input type="checkbox" name="stats_enabled" defaultChecked={settings?.statsEnabled ?? true} className="h-4 w-4" />
+          Homepage stats section enabled
+        </label>
+        <p className="mt-1 text-xs text-slate-400">
+          The &quot;Important information&quot; row of four numbers shown between the pricing table and the news
+          section.
+        </p>
+
+        {[0, 1, 2, 3].map((i) => (
+          <div key={i} className="mt-4 grid grid-cols-2 gap-4">
+            <label className={labelClass}>
+              Stat {i + 1} value
+              <input
+                name={`stat${i + 1}_value`}
+                defaultValue={settings?.stats[i]?.value ?? ""}
+                className={inputClass}
+              />
+            </label>
+            <label className={labelClass}>
+              Stat {i + 1} label
+              <input
+                name={`stat${i + 1}_label`}
+                defaultValue={settings?.stats[i]?.label ?? ""}
+                className={inputClass}
+              />
+            </label>
+          </div>
+        ))}
+      </div>
+
       {message && <p className="text-sm text-emerald-600">{message}</p>}
 
       <button

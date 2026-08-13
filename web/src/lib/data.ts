@@ -1,5 +1,5 @@
 import { query } from "./db";
-import type { SiteSettings, ValueProp, UnitType, Office, PhoneNumber, Partner, Post } from "./types";
+import type { SiteSettings, ValueProp, UnitType, Office, PhoneNumber, Partner, Post, BankAccount } from "./types";
 
 interface SiteSettingsRow {
   site_name: string;
@@ -15,6 +15,15 @@ interface SiteSettingsRow {
   popup_enabled: number;
   popup_headline: string;
   footer_credit: string;
+  stats_enabled: number;
+  stat1_value: string;
+  stat1_label: string;
+  stat2_value: string;
+  stat2_label: string;
+  stat3_value: string;
+  stat3_label: string;
+  stat4_value: string;
+  stat4_label: string;
 }
 
 export async function getSiteSettings(): Promise<SiteSettings | null> {
@@ -36,6 +45,13 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
       popupEnabled: !!row.popup_enabled,
       popupHeadline: row.popup_headline,
       footerCredit: row.footer_credit,
+      statsEnabled: !!row.stats_enabled,
+      stats: [
+        { value: row.stat1_value, label: row.stat1_label },
+        { value: row.stat2_value, label: row.stat2_label },
+        { value: row.stat3_value, label: row.stat3_label },
+        { value: row.stat4_value, label: row.stat4_label },
+      ],
     };
   } catch {
     return null;
@@ -185,5 +201,26 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     return rows[0] ? mapPost(rows[0]) : null;
   } catch {
     return null;
+  }
+}
+
+interface BankAccountRow {
+  id: number;
+  bank_name: string;
+  registration_account: string;
+  price_account: string;
+}
+
+export async function getBankAccounts(): Promise<BankAccount[]> {
+  try {
+    const rows = await query<BankAccountRow[]>("SELECT * FROM bank_accounts ORDER BY sort_order ASC");
+    return rows.map((row) => ({
+      id: row.id,
+      bankName: row.bank_name,
+      registrationAccount: row.registration_account,
+      priceAccount: row.price_account,
+    }));
+  } catch {
+    return [];
   }
 }
