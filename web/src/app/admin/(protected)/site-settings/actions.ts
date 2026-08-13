@@ -32,6 +32,10 @@ export async function updateSiteSettings(_prevState: string | null, formData: Fo
     get("stat4_value"),
     get("stat4_label"),
     formData.get("maintenance_mode") ? 1 : 0,
+    get("about_heading") || null,
+    get("about_body") || null,
+    get("contact_heading"),
+    get("contact_intro") || null,
   ];
 
   if (existing[0]) {
@@ -41,7 +45,8 @@ export async function updateSiteSettings(_prevState: string | null, formData: Fo
         phone = ?, email = ?, secondary_email = ?, register_cta_label = ?, appointment_cta_label = ?,
         popup_enabled = ?, popup_headline = ?, footer_credit = ?,
         stats_enabled = ?, stat1_value = ?, stat1_label = ?, stat2_value = ?, stat2_label = ?,
-        stat3_value = ?, stat3_label = ?, stat4_value = ?, stat4_label = ?, maintenance_mode = ?
+        stat3_value = ?, stat3_label = ?, stat4_value = ?, stat4_label = ?, maintenance_mode = ?,
+        about_heading = ?, about_body = ?, contact_heading = ?, contact_intro = ?
        WHERE id = ?`,
       [...values, existing[0].id]
     );
@@ -51,8 +56,8 @@ export async function updateSiteSettings(_prevState: string | null, formData: Fo
         (site_name, hero_headline, hero_subheadline, hero_image_url, logo_url, phone, email, secondary_email,
          register_cta_label, appointment_cta_label, popup_enabled, popup_headline, footer_credit,
          stats_enabled, stat1_value, stat1_label, stat2_value, stat2_label, stat3_value, stat3_label,
-         stat4_value, stat4_label, maintenance_mode)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+         stat4_value, stat4_label, maintenance_mode, about_heading, about_body, contact_heading, contact_intro)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       values
     );
   }

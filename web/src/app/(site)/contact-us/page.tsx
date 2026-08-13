@@ -9,10 +9,12 @@ export default async function ContactUsPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-16">
-      <h1 className="text-3xl font-bold tracking-tight text-[#07283b] sm:text-4xl">Contact us</h1>
+      <h1 className="text-3xl font-bold tracking-tight text-[#07283b] sm:text-4xl">
+        {settings?.contactHeading || "Contact us"}
+      </h1>
       <p className="mt-3 max-w-xl text-slate-600">
-        Reach out with any questions about pricing, availability, or the registration process — we&apos;ll get back
-        to you as soon as we can.
+        {settings?.contactIntro ||
+          "Reach out with any questions about pricing, availability, or the registration process — we'll get back to you as soon as we can."}
       </p>
 
       <div className="mt-12 grid gap-12 lg:grid-cols-[1fr_1fr]">

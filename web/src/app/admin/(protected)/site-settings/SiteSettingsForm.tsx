@@ -128,6 +128,46 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings | null }
         ))}
       </div>
 
+      <div className="border-t border-slate-100 pt-5">
+        <p className="text-sm font-semibold text-[#07283b]">About Us page</p>
+        <label className="mt-3 block text-sm font-medium text-slate-700">
+          Heading
+          <input
+            name="about_heading"
+            defaultValue={settings?.aboutHeading ?? ""}
+            placeholder={`About ${settings?.siteName ?? "Dreamspace Realty"}`}
+            className={inputClass}
+          />
+        </label>
+        <label className="mt-4 block text-sm font-medium text-slate-700">
+          Body copy
+          <textarea
+            name="about_body"
+            rows={6}
+            defaultValue={settings?.aboutBody ?? ""}
+            placeholder="Write the About Us page's main text here. Leave blank to keep showing the value props as a placeholder."
+            className={inputClass}
+          />
+        </label>
+      </div>
+
+      <div className="border-t border-slate-100 pt-5">
+        <p className="text-sm font-semibold text-[#07283b]">Contact Us page</p>
+        <label className="mt-3 block text-sm font-medium text-slate-700">
+          Heading
+          <input name="contact_heading" defaultValue={settings?.contactHeading ?? "Contact us"} className={inputClass} />
+        </label>
+        <label className="mt-4 block text-sm font-medium text-slate-700">
+          Intro text
+          <textarea
+            name="contact_intro"
+            rows={3}
+            defaultValue={settings?.contactIntro ?? ""}
+            className={inputClass}
+          />
+        </label>
+      </div>
+
       {message && <p className="text-sm text-emerald-600">{message}</p>}
 
       <button

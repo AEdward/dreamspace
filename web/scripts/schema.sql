@@ -23,10 +23,18 @@ CREATE TABLE IF NOT EXISTS site_settings (
   stat4_value VARCHAR(50) DEFAULT 'Birr 139,000',
   stat4_label VARCHAR(255) DEFAULT 'Advance payment starting from',
   maintenance_mode BOOLEAN NOT NULL DEFAULT 0,
+  about_heading VARCHAR(255),
+  about_body TEXT,
+  contact_heading VARCHAR(255) DEFAULT 'Contact us',
+  contact_intro TEXT,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS maintenance_mode BOOLEAN NOT NULL DEFAULT 0;
+ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS about_heading VARCHAR(255);
+ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS about_body TEXT;
+ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS contact_heading VARCHAR(255) DEFAULT 'Contact us';
+ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS contact_intro TEXT;
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS stats_enabled BOOLEAN NOT NULL DEFAULT 1;
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS stat1_value VARCHAR(50) DEFAULT '10,000';
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS stat1_label VARCHAR(255) DEFAULT 'Total subscribers';

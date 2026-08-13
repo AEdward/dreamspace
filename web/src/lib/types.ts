@@ -15,6 +15,10 @@ export interface SiteSettings {
   statsEnabled: boolean;
   stats: { value: string; label: string }[];
   maintenanceMode: boolean;
+  aboutHeading: string | null;
+  aboutBody: string | null;
+  contactHeading: string;
+  contactIntro: string | null;
 }
 
 export interface BankAccount {

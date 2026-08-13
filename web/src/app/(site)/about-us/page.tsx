@@ -8,11 +8,19 @@ export default async function AboutUsPage() {
   return (
     <div className="mx-auto max-w-4xl px-6 py-16">
       <h1 className="text-3xl font-bold tracking-tight text-[#07283b] sm:text-4xl">
-        About {settings?.siteName ?? "Dreamspace Realty"}
+        {settings?.aboutHeading || `About ${settings?.siteName ?? "Dreamspace Realty"}`}
       </h1>
-      <p className="mt-4 text-lg text-slate-600">
-        {settings?.heroHeadline ?? "We will make it happen!"} {settings?.heroSubheadline ?? ""}
-      </p>
+      {settings?.aboutBody ? (
+        <div className="mt-4 space-y-4 text-lg text-slate-600">
+          {settings.aboutBody.split("\n").filter(Boolean).map((paragraph, i) => (
+            <p key={i}>{paragraph}</p>
+          ))}
+        </div>
+      ) : (
+        <p className="mt-4 text-lg text-slate-600">
+          {settings?.heroHeadline ?? "We will make it happen!"} {settings?.heroSubheadline ?? ""}
+        </p>
+      )}
 
       {valueProps.length > 0 && (
         <div className="mt-12 grid gap-8 sm:grid-cols-2">

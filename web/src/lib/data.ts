@@ -25,6 +25,10 @@ interface SiteSettingsRow {
   stat4_value: string;
   stat4_label: string;
   maintenance_mode: number;
+  about_heading: string | null;
+  about_body: string | null;
+  contact_heading: string;
+  contact_intro: string | null;
 }
 
 export async function getSiteSettings(): Promise<SiteSettings | null> {
@@ -54,6 +58,10 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
         { value: row.stat4_value, label: row.stat4_label },
       ],
       maintenanceMode: !!row.maintenance_mode,
+      aboutHeading: row.about_heading,
+      aboutBody: row.about_body,
+      contactHeading: row.contact_heading,
+      contactIntro: row.contact_intro,
     };
   } catch {
     return null;
