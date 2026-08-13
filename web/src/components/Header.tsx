@@ -3,9 +3,7 @@ import type { SiteSettings } from "@/lib/types";
 
 const NAV_LINKS = [
   { href: "/", label: "Home page" },
-  { href: "/registration", label: "Register from anywhere" },
   { href: "/about-us", label: "About us" },
-  { href: "/harmony-builders", label: "About Harmony Builders" },
   { href: "/news", label: "News" },
   { href: "/contact-us", label: "Talk to us" },
 ];

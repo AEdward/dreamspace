@@ -1,5 +1,7 @@
 "use client";
 
+import { RoundedBox } from "@react-three/drei";
+
 // Procedural low-poly furniture, positioned in room-local meters (origin at
 // the room's near corner, x/z spanning its width/depth). Colors match the
 // warm neutral palette of the reference floor plan renders — no navy/orange.
@@ -14,19 +16,19 @@ const METAL = "#9a9488";
 const COUNTER = "#8f8477";
 
 function Box({ position, size, color }: { position: [number, number, number]; size: [number, number, number]; color: string }) {
+  const radius = Math.min(0.03, Math.min(...size) * 0.18);
   return (
-    <mesh position={position}>
-      <boxGeometry args={size} />
-      <meshStandardMaterial color={color} roughness={0.6} metalness={0.05} />
-    </mesh>
+    <RoundedBox position={position} args={size} radius={radius} smoothness={3} castShadow receiveShadow>
+      <meshStandardMaterial color={color} roughness={0.55} metalness={0.04} />
+    </RoundedBox>
   );
 }
 
 function Cyl({ position, radius, height, color }: { position: [number, number, number]; radius: number; height: number; color: string }) {
   return (
-    <mesh position={position}>
-      <cylinderGeometry args={[radius, radius, height, 20]} />
-      <meshStandardMaterial color={color} roughness={0.55} metalness={0.05} />
+    <mesh position={position} castShadow receiveShadow>
+      <cylinderGeometry args={[radius, radius, height, 28]} />
+      <meshStandardMaterial color={color} roughness={0.5} metalness={0.04} />
     </mesh>
   );
 }

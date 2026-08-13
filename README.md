@@ -25,6 +25,7 @@ site — as a single **Next.js** app backed directly by **MySQL**.
 | `value_props` | One of the homepage feature blocks |
 | `posts` | A blog / news article |
 | `site_settings` | Hero copy, contact info, CTA labels, footer credit (single row) |
+| `bookings` | Appointment/contact submissions from the "Booking" popup and Contact Us page |
 
 ## Local development
 
@@ -74,17 +75,25 @@ admin panel (log in with `ADMIN_PASSWORD`).
 
 ## What's implemented vs. still needed
 
-**Implemented:** homepage (hero, value props, pricing table, latest news, partners, footer
-with all office/construction-site data), a news list + detail page, mobile navigation, and a
-full admin panel (login, dashboard, CRUD for every content type above).
+**Implemented:** homepage (3D hero, value props, 3D furnished floor-plan pricing cards, latest
+news, partners, footer with all office/construction-site data), a news list + detail page,
+`/about-us` and `/contact-us` pages, a "Booking" popup (homepage) and contact form
+(`/contact-us`) that both save to `bookings` and are reviewable in `/admin/bookings`, mobile
+navigation, and a full admin panel (login, dashboard, CRUD for every content type above).
+
+Note: `/about-us`'s body copy is currently assembled from the value props (real, already-
+migrated content) as a placeholder — the original WordPress site's actual About Us narrative
+wasn't in the homepage export, so replace it via the admin panel (or give it new copy to add)
+once you have the real text.
 
 **Not yet built** (original WordPress site had these — worth planning as follow-up work):
-- `/about-us`, `/harmony-builders`, `/registration`, `/contact-us` pages (nav links currently
-  point at routes that don't exist yet)
-- The registration form's actual backend (original used Forminator + Popup Maker — this
-  needs a real endpoint, e.g. a `registrations` table + email notification)
+- Email/SMS notifications when a new booking or contact message comes in (currently
+  admin-panel-only, no push notification)
 - Multi-language support (original used a machine-translated GTranslate widget covering
   hundreds of languages — recommend a smaller, curated, professionally-translated set
   instead, given the content includes pricing/financial terms)
 - Full blog post bodies (only excerpts were migrated as placeholders — the original site's
   full article HTML wasn't in the page export)
+- The "Bank details" account-number table and homepage stats counters (10,000 subscribers,
+  etc.) from the original homepage were surfaced during this rebuild but not yet re-added —
+  ask if you still want them

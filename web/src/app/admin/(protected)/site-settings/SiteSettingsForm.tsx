@@ -56,7 +56,7 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings | null }
 
       <div className="grid grid-cols-2 gap-4">
         <label className={labelClass}>
-          Register CTA label
+          Booking button label
           <input name="register_cta_label" defaultValue={settings?.registerCtaLabel ?? ""} className={inputClass} />
         </label>
         <label className={labelClass}>

@@ -1,11 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import type { SiteSettings } from "@/lib/types";
 import { HeroSceneLoader } from "@/components/three/HeroSceneLoader";
+import { BookingModal } from "@/components/BookingModal";
 
 export function Hero({ settings }: { settings: SiteSettings | null }) {
   const heroUrl = settings?.heroImageUrl ?? "/brand/hero.jpg";
+  const [bookingOpen, setBookingOpen] = useState(false);
 
   return (
     <section className="relative isolate flex min-h-[56vh] items-center overflow-hidden bg-[#07283b] text-white">
@@ -42,12 +45,13 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
             transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
             className="mt-9 flex flex-wrap gap-4"
           >
-            <a
-              href="/registration"
+            <button
+              type="button"
+              onClick={() => setBookingOpen(true)}
               className="rounded-full bg-[#f4600a] px-7 py-3.5 font-semibold shadow-lg shadow-[#f4600a]/20 transition-all hover:-translate-y-0.5 hover:bg-[#d8540a] hover:shadow-xl hover:shadow-[#f4600a]/30"
             >
-              {settings?.registerCtaLabel ?? "Register from home!"}
-            </a>
+              {settings?.registerCtaLabel ?? "Booking"}
+            </button>
             {settings?.phone && (
               <a
                 href={`tel:${settings.phone.replace(/\s+/g, "")}`}
@@ -87,6 +91,8 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
           <HeroSceneLoader />
         </motion.div>
       </div>
+
+      <BookingModal open={bookingOpen} onClose={() => setBookingOpen(false)} />
     </section>
   );
 }
