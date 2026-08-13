@@ -11,6 +11,7 @@ export interface SiteSettings {
   popupEnabled: boolean;
   popupHeadline: string;
   footerCredit: string;
+  footerCreditUrl: string | null;
   statsEnabled: boolean;
   stats: { value: string; label: string }[];
   maintenanceMode: boolean;

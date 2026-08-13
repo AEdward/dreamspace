@@ -14,6 +14,7 @@ interface SiteSettingsRow {
   popup_enabled: number;
   popup_headline: string;
   footer_credit: string;
+  footer_credit_url: string | null;
   stats_enabled: number;
   stat1_value: string;
   stat1_label: string;
@@ -48,6 +49,7 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
       popupEnabled: !!row.popup_enabled,
       popupHeadline: row.popup_headline,
       footerCredit: row.footer_credit,
+      footerCreditUrl: row.footer_credit_url,
       statsEnabled: !!row.stats_enabled,
       stats: [
         { value: row.stat1_value, label: row.stat1_label },

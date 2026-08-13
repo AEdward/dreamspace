@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS site_settings (
   popup_enabled BOOLEAN NOT NULL DEFAULT 1,
   popup_headline VARCHAR(255) DEFAULT 'We are running a limited time registration. Hurry up!',
   footer_credit VARCHAR(255) DEFAULT 'buildwithanahom',
+  footer_credit_url VARCHAR(500),
   stats_enabled BOOLEAN NOT NULL DEFAULT 1,
   stat1_value VARCHAR(50) DEFAULT '10,000',
   stat1_label VARCHAR(255) DEFAULT 'Total subscribers',
@@ -31,6 +32,7 @@ CREATE TABLE IF NOT EXISTS site_settings (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS maintenance_mode BOOLEAN NOT NULL DEFAULT 0;
+ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS footer_credit_url VARCHAR(500);
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS about_heading VARCHAR(255);
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS about_body TEXT;
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS contact_heading VARCHAR(255) DEFAULT 'Contact us';

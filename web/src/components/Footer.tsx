@@ -2,7 +2,6 @@ import type { SiteSettings, Office } from "@/lib/types";
 
 export function Footer({ settings, offices }: { settings: SiteSettings | null; offices: Office[] }) {
   const branches = offices.filter((office) => !office.isConstructionSite);
-  const sites = offices.filter((office) => office.isConstructionSite);
 
   return (
     <footer className="bg-[#07283b] text-white">
@@ -23,15 +22,6 @@ export function Footer({ settings, offices }: { settings: SiteSettings | null; o
           ))}
         </div>
 
-        {sites.length > 0 && (
-          <div className="mt-10 border-t border-white/10 pt-8">
-            <h3 className="text-sm font-semibold uppercase tracking-wide text-white/60">Construction sites</h3>
-            <p className="mt-2 text-sm text-white/80">
-              {sites.map((site) => site.name.replace(" (Construction Site)", "")).join(" · ")}
-            </p>
-          </div>
-        )}
-
         <div className="mt-10 border-t border-white/10 pt-8 text-sm text-white/70">
           {settings?.email && (
             <p>
@@ -46,7 +36,19 @@ export function Footer({ settings, offices }: { settings: SiteSettings | null; o
           <p>
             &copy; {new Date().getFullYear()} {settings?.siteName ?? "Dreamspace Realty"}. All rights reserved.
           </p>
-          {settings?.footerCredit && <p>Developed by {settings.footerCredit}</p>}
+          {settings?.footerCredit &&
+            (settings.footerCreditUrl ? (
+              <a
+                href={settings.footerCreditUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium text-white/80 underline underline-offset-2 hover:text-white"
+              >
+                Developed by {settings.footerCredit}
+              </a>
+            ) : (
+              <p className="text-sm font-medium text-white/80">Developed by {settings.footerCredit}</p>
+            ))}
         </div>
       </div>
     </footer>
