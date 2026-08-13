@@ -1,5 +1,27 @@
 import { query } from "./db";
-import type { SiteSettings, ValueProp, UnitType, Office, PhoneNumber, Partner, Post, BankAccount } from "./types";
+import type {
+  SiteSettings,
+  ValueProp,
+  UnitType,
+  Office,
+  PhoneNumber,
+  Partner,
+  Post,
+  BankAccount,
+  PageSection,
+  SectionKey,
+} from "./types";
+
+export const DEFAULT_SECTION_ORDER: SectionKey[] = [
+  "hero",
+  "value_props",
+  "pricing",
+  "bank_details",
+  "stats",
+  "news",
+  "construction_sites",
+  "partners",
+];
 
 interface SiteSettingsRow {
   site_name: string;
@@ -232,5 +254,25 @@ export async function getBankAccounts(): Promise<BankAccount[]> {
     }));
   } catch {
     return [];
+  }
+}
+
+interface PageSectionRow {
+  section_key: SectionKey;
+  visible: number;
+}
+
+export async function getPageSections(page: string): Promise<PageSection[]> {
+  try {
+    const rows = await query<PageSectionRow[]>(
+      "SELECT section_key, visible FROM page_sections WHERE page = ? ORDER BY sort_order ASC",
+      [page]
+    );
+    if (rows.length === 0) {
+      return DEFAULT_SECTION_ORDER.map((key) => ({ key, visible: true }));
+    }
+    return rows.map((row) => ({ key: row.section_key, visible: !!row.visible }));
+  } catch {
+    return DEFAULT_SECTION_ORDER.map((key) => ({ key, visible: true }));
   }
 }

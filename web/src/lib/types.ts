@@ -21,6 +21,21 @@ export interface SiteSettings {
   contactIntro: string | null;
 }
 
+export type SectionKey =
+  | "hero"
+  | "value_props"
+  | "pricing"
+  | "bank_details"
+  | "stats"
+  | "news"
+  | "construction_sites"
+  | "partners";
+
+export interface PageSection {
+  key: SectionKey;
+  visible: boolean;
+}
+
 export interface BankAccount {
   id: number;
   bankName: string;

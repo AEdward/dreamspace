@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { Hero } from "@/components/Hero";
 import { ValueProps } from "@/components/ValueProps";
 import { PricingTable } from "@/components/PricingTable";
@@ -14,12 +15,14 @@ import {
   getPartners,
   getBankAccounts,
   getOffices,
+  getPageSections,
 } from "@/lib/data";
+import type { SectionKey } from "@/lib/types";
 
 export const revalidate = 60;
 
 export default async function Home() {
-  const [settings, valueProps, unitTypes, posts, partners, bankAccounts, offices] = await Promise.all([
+  const [settings, valueProps, unitTypes, posts, partners, bankAccounts, offices, sections] = await Promise.all([
     getSiteSettings(),
     getValueProps(),
     getUnitTypes(),
@@ -27,18 +30,21 @@ export default async function Home() {
     getPartners(),
     getBankAccounts(),
     getOffices(),
+    getPageSections("home"),
   ]);
 
-  return (
-    <>
-      <Hero settings={settings} />
-      <ValueProps items={valueProps} />
-      <PricingTable units={unitTypes} />
-      <BankDetails accounts={bankAccounts} />
-      {settings?.statsEnabled && <StatsSection stats={settings.stats} />}
-      <NewsSection posts={posts} />
-      <ConstructionSites offices={offices} />
-      <PartnersStrip partners={partners} />
-    </>
-  );
+  const renderers: Record<SectionKey, () => React.ReactNode> = {
+    hero: () => <Hero settings={settings} />,
+    value_props: () => <ValueProps items={valueProps} />,
+    pricing: () => <PricingTable units={unitTypes} />,
+    bank_details: () => <BankDetails accounts={bankAccounts} />,
+    stats: () => (settings?.statsEnabled ? <StatsSection stats={settings.stats} /> : null),
+    news: () => <NewsSection posts={posts} />,
+    construction_sites: () => <ConstructionSites offices={offices} />,
+    partners: () => <PartnersStrip partners={partners} />,
+  };
+
+  return sections
+    .filter((section) => section.visible)
+    .map((section) => <Fragment key={section.key}>{renderers[section.key]()}</Fragment>);
 }

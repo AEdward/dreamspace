@@ -258,7 +258,7 @@ async function main() {
   const bankAccounts = [
     {
       bank_name: "ጎህ ቤቶች ባንክ",
-      registration_account: "10000005071331",
+      registration_account: "1000000507133",
       price_account: "1000000510525",
       sort_order: 1,
     },
@@ -281,6 +281,29 @@ async function main() {
     }
   }
   console.log(`  + bank_accounts seeded (${bankAccounts.length})`);
+
+  const pageSections = [
+    { section_key: "hero", sort_order: 1 },
+    { section_key: "value_props", sort_order: 2 },
+    { section_key: "pricing", sort_order: 3 },
+    { section_key: "bank_details", sort_order: 4 },
+    { section_key: "stats", sort_order: 5 },
+    { section_key: "news", sort_order: 6 },
+    { section_key: "construction_sites", sort_order: 7 },
+    { section_key: "partners", sort_order: 8 },
+  ];
+  for (const section of pageSections) {
+    const [existing] = await connection.query("SELECT id FROM page_sections WHERE page = 'home' AND section_key = ?", [
+      section.section_key,
+    ]);
+    if (existing.length === 0) {
+      await connection.query("INSERT INTO page_sections (page, section_key, sort_order) VALUES ('home', ?, ?)", [
+        section.section_key,
+        section.sort_order,
+      ]);
+    }
+  }
+  console.log(`  + page_sections seeded (${pageSections.length})`);
 
   console.log("\nSeed complete.");
   await connection.end();

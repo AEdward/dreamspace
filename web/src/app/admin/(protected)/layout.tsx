@@ -2,6 +2,7 @@ import Link from "next/link";
 
 const NAV = [
   { href: "/admin", label: "Dashboard" },
+  { href: "/admin/page-builder", label: "Page Builder" },
   { href: "/admin/site-settings", label: "Site Settings" },
   { href: "/admin/value-props", label: "Value Props" },
   { href: "/admin/unit-types", label: "Unit Types" },

@@ -125,3 +125,15 @@ CREATE TABLE IF NOT EXISTS bank_accounts (
   price_account VARCHAR(100) NOT NULL,
   sort_order INT NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Drag-and-drop ordering / visibility for homepage sections. "page" is
+-- future-proofed for other pages (about-us, contact-us) even though only
+-- "home" is used today.
+CREATE TABLE IF NOT EXISTS page_sections (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  page VARCHAR(50) NOT NULL DEFAULT 'home',
+  section_key VARCHAR(50) NOT NULL,
+  sort_order INT NOT NULL DEFAULT 0,
+  visible BOOLEAN NOT NULL DEFAULT 1,
+  UNIQUE KEY page_section (page, section_key)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
