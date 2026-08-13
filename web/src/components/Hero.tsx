@@ -8,13 +8,13 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
   const heroUrl = settings?.heroImageUrl ?? "/brand/hero.jpg";
 
   return (
-    <section className="relative isolate flex min-h-[85vh] items-center overflow-hidden bg-[#07283b] text-white">
+    <section className="relative isolate flex min-h-[56vh] items-center overflow-hidden bg-[#07283b] text-white">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={heroUrl} alt="" className="absolute inset-0 h-full w-full object-cover opacity-25" />
       <div className="absolute inset-0 bg-gradient-to-t from-[#07283b] via-[#07283b]/85 to-[#07283b]/40" />
       <div className="absolute inset-0 bg-gradient-to-r from-[#07283b] via-[#07283b]/60 to-transparent" />
 
-      <div className="relative mx-auto grid w-full max-w-7xl items-center gap-12 px-6 py-28 lg:grid-cols-[1.1fr_0.9fr]">
+      <div className="relative mx-auto grid w-full max-w-7xl items-center gap-12 px-6 py-16 lg:grid-cols-[1.1fr_0.9fr]">
         <div>
           <motion.h1
             initial={{ opacity: 0, y: 24 }}
@@ -81,7 +81,7 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
           initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.9, delay: 0.15, ease: "easeOut" }}
-          className="relative hidden h-[420px] lg:block"
+          className="relative hidden h-[300px] lg:block"
           aria-hidden="true"
         >
           <HeroSceneLoader />
