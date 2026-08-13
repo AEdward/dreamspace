@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { query } from "@/lib/db";
 import { UnitTypeForm } from "../UnitTypeForm";
 import { updateUnitType } from "../actions";
+import { TranslationEditor } from "../../translations/TranslationEditor";
+import { getTranslationsFor } from "../../translations/actions";
 
 interface Row {
   id: number;
@@ -50,6 +52,16 @@ export default async function EditUnitTypePage({ params }: { params: Promise<{ i
         action={boundAction}
         submitLabel="Save"
       />
+
+      <div className="mt-8 max-w-xl">
+        <h2 className="text-lg font-semibold text-[#07283b]">Amharic / Oromo overrides</h2>
+        <TranslationEditor
+          entityType="unit_type"
+          entityId={row.id}
+          initial={await getTranslationsFor("unit_type", row.id)}
+          fields={[{ name: "name", label: "Name" }]}
+        />
+      </div>
     </div>
   );
 }

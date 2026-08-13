@@ -1,15 +1,17 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { createSession, verifyPassword } from "@/lib/auth";
+import { createSession, verifyCredentials } from "@/lib/auth";
 
 export async function login(_prevState: string | null, formData: FormData): Promise<string | null> {
+  const email = String(formData.get("email") ?? "");
   const password = String(formData.get("password") ?? "");
 
-  if (!verifyPassword(password)) {
-    return "Incorrect password.";
+  const session = await verifyCredentials(email, password);
+  if (!session) {
+    return "Incorrect email or password.";
   }
 
-  await createSession();
+  await createSession(session.userId, session.role);
   redirect("/admin");
 }

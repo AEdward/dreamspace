@@ -2,8 +2,9 @@
 
 import { motion } from "framer-motion";
 import type { Office } from "@/lib/types";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
-export function ConstructionSites({ offices }: { offices: Office[] }) {
+export function ConstructionSites({ offices, dict }: { offices: Office[]; dict: Dictionary }) {
   const sites = offices.filter((office) => office.isConstructionSite);
   if (sites.length === 0) return null;
 
@@ -17,7 +18,7 @@ export function ConstructionSites({ offices }: { offices: Office[] }) {
           transition={{ duration: 0.6 }}
           className="text-center text-3xl font-bold tracking-tight text-[#07283b] sm:text-4xl"
         >
-          Construction sites
+          {dict.sections.constructionSites}
         </motion.h2>
 
         <div className="mt-14 grid gap-8 lg:grid-cols-3">

@@ -1,11 +1,31 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { getPostBySlug } from "@/lib/data";
+import { getLocale } from "@/lib/i18n/locale";
 
 export const revalidate = 60;
 
+export async function generateMetadata({ params }: PageProps<"/news/[slug]">): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug, await getLocale());
+  if (!post) return {};
+  return {
+    title: post.title,
+    description: post.excerpt ?? undefined,
+    alternates: { canonical: `/news/${post.slug}` },
+    openGraph: {
+      title: post.title,
+      description: post.excerpt ?? undefined,
+      type: "article",
+      images: post.coverImageUrl ? [post.coverImageUrl] : undefined,
+    },
+  };
+}
+
 export default async function NewsPostPage({ params }: PageProps<"/news/[slug]">) {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const locale = await getLocale();
+  const post = await getPostBySlug(slug, locale);
 
   if (!post) {
     notFound();

@@ -1,8 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
-export function StatsSection({ stats }: { stats: { value: string; label: string }[] }) {
+export function StatsSection({ stats, dict }: { stats: { value: string; label: string }[]; dict: Dictionary }) {
   if (stats.length === 0) return null;
 
   return (
@@ -15,7 +16,7 @@ export function StatsSection({ stats }: { stats: { value: string; label: string 
           transition={{ duration: 0.5 }}
           className="text-center text-sm font-semibold uppercase tracking-wide text-white/60"
         >
-          Important information
+          {dict.sections.importantInfo}
         </motion.h2>
 
         <div className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">

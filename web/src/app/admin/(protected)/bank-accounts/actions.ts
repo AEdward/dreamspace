@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { query } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth";
 
 function readFields(formData: FormData) {
   return {
@@ -14,6 +15,7 @@ function readFields(formData: FormData) {
 }
 
 export async function createBankAccount(_prevState: string | null, formData: FormData): Promise<string | null> {
+  await requireAdmin();
   const f = readFields(formData);
   await query(
     "INSERT INTO bank_accounts (bank_name, registration_account, price_account, sort_order) VALUES (?, ?, ?, ?)",
@@ -29,6 +31,7 @@ export async function updateBankAccount(
   _prevState: string | null,
   formData: FormData
 ): Promise<string | null> {
+  await requireAdmin();
   const f = readFields(formData);
   await query(
     "UPDATE bank_accounts SET bank_name = ?, registration_account = ?, price_account = ?, sort_order = ? WHERE id = ?",
@@ -40,6 +43,7 @@ export async function updateBankAccount(
 }
 
 export async function deleteBankAccount(id: number): Promise<void> {
+  await requireAdmin();
   await query("DELETE FROM bank_accounts WHERE id = ?", [id]);
   revalidatePath("/");
   revalidatePath("/admin/bank-accounts");

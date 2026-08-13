@@ -1,8 +1,17 @@
 "use client";
 
 import { ContactForm } from "./ContactForm";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
-export function BookingModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function BookingModal({
+  open,
+  onClose,
+  dict,
+}: {
+  open: boolean;
+  onClose: () => void;
+  dict: Dictionary;
+}) {
   if (!open) return null;
 
   return (
@@ -17,7 +26,7 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-[#07283b]">Book an appointment</h2>
+          <h2 className="text-xl font-bold text-[#07283b]">{dict.booking.title}</h2>
           <button
             onClick={onClose}
             aria-label="Close"
@@ -29,14 +38,15 @@ export function BookingModal({ open, onClose }: { open: boolean; onClose: () => 
           </button>
         </div>
 
-        <p className="mt-1 text-sm text-slate-500">Tell us how to reach you and we&apos;ll set up a time.</p>
+        <p className="mt-1 text-sm text-slate-500">{dict.booking.intro}</p>
 
         <div className="mt-6">
           <ContactForm
             source="booking"
-            submitLabel="Book appointment"
-            messageLabel="Preferred date / notes"
-            messagePlaceholder="e.g. Weekday afternoons work best"
+            dict={dict}
+            submitLabel={dict.booking.submit}
+            messageLabel={dict.booking.notesLabel}
+            messagePlaceholder={dict.booking.notesPlaceholder}
           />
         </div>
       </div>

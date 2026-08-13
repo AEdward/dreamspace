@@ -1,7 +1,10 @@
 import type { SiteSettings, Office } from "@/lib/types";
+import { getLocale } from "@/lib/i18n/locale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 
-export function Footer({ settings, offices }: { settings: SiteSettings | null; offices: Office[] }) {
+export async function Footer({ settings, offices }: { settings: SiteSettings | null; offices: Office[] }) {
   const branches = offices.filter((office) => !office.isConstructionSite);
+  const dict = getDictionary(await getLocale());
 
   return (
     <footer className="bg-[#07283b] text-white">
@@ -25,16 +28,20 @@ export function Footer({ settings, offices }: { settings: SiteSettings | null; o
         <div className="mt-10 border-t border-white/10 pt-8 text-sm text-white/70">
           {settings?.email && (
             <p>
-              Email: {settings.email}
+              {dict.footer.email} {settings.email}
               {settings.secondaryEmail ? ` · ${settings.secondaryEmail}` : ""}
             </p>
           )}
-          {settings?.phone && <p className="mt-1">Mobile: {settings.phone}</p>}
+          {settings?.phone && (
+            <p className="mt-1">
+              {dict.footer.mobile} {settings.phone}
+            </p>
+          )}
         </div>
 
         <div className="mt-10 flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-white/50 sm:flex-row sm:items-center sm:justify-between">
           <p>
-            &copy; {new Date().getFullYear()} {settings?.siteName ?? "Dreamspace Realty"}. All rights reserved.
+            &copy; {new Date().getFullYear()} {settings?.siteName ?? "Dreamspace Realty"}. {dict.footer.rights}
           </p>
           {settings?.footerCredit &&
             (settings.footerCreditUrl ? (
@@ -44,10 +51,12 @@ export function Footer({ settings, offices }: { settings: SiteSettings | null; o
                 rel="noopener noreferrer"
                 className="text-sm font-medium text-white/80 underline underline-offset-2 hover:text-white"
               >
-                Developed by {settings.footerCredit}
+                {dict.footer.developedBy} {settings.footerCredit}
               </a>
             ) : (
-              <p className="text-sm font-medium text-white/80">Developed by {settings.footerCredit}</p>
+              <p className="text-sm font-medium text-white/80">
+                {dict.footer.developedBy} {settings.footerCredit}
+              </p>
             ))}
         </div>
       </div>

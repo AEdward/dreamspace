@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { query } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth";
 import { deleteBankAccount } from "./actions";
 
 interface Row {
@@ -10,6 +11,7 @@ interface Row {
 }
 
 export default async function BankAccountsPage() {
+  await requireAdmin();
   const rows = await query<Row[]>("SELECT * FROM bank_accounts ORDER BY sort_order ASC");
 
   return (

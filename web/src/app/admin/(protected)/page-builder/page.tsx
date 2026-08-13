@@ -1,7 +1,9 @@
 import { getPageSections } from "@/lib/data";
+import { requireAdmin } from "@/lib/auth";
 import { PageBuilderEditor } from "./PageBuilderEditor";
 
 export default async function PageBuilderPage() {
+  await requireAdmin();
   const sections = await getPageSections("home");
 
   return (

@@ -1,10 +1,22 @@
+import type { Metadata } from "next";
 import { getSiteSettings, getOffices } from "@/lib/data";
+import { getLocale } from "@/lib/i18n/locale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 import { ContactForm } from "@/components/ContactForm";
 
 export const revalidate = 60;
 
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings(await getLocale());
+  const title = settings?.contactHeading || "Contact us";
+  const description = settings?.contactIntro || undefined;
+  return { title, description, alternates: { canonical: "/contact-us" } };
+}
+
 export default async function ContactUsPage() {
-  const [settings, offices] = await Promise.all([getSiteSettings(), getOffices()]);
+  const locale = await getLocale();
+  const dict = getDictionary(locale);
+  const [settings, offices] = await Promise.all([getSiteSettings(locale), getOffices(locale)]);
   const branches = offices.filter((office) => !office.isConstructionSite);
 
   return (
@@ -19,18 +31,18 @@ export default async function ContactUsPage() {
 
       <div className="mt-12 grid gap-12 lg:grid-cols-[1fr_1fr]">
         <div>
-          <h2 className="text-lg font-semibold text-[#07283b]">Send us a message</h2>
+          <h2 className="text-lg font-semibold text-[#07283b]">{dict.contactPage.sendMessage}</h2>
           <div className="mt-4">
-            <ContactForm source="contact" submitLabel="Send message" />
+            <ContactForm source="contact" dict={dict} submitLabel={dict.form.sendMessage} />
           </div>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold text-[#07283b]">Get in touch directly</h2>
+          <h2 className="text-lg font-semibold text-[#07283b]">{dict.contactPage.getInTouch}</h2>
           <div className="mt-4 space-y-2 text-sm text-slate-600">
             {settings?.phone && (
               <p>
-                Mobile:{" "}
+                {dict.contactPage.mobile}{" "}
                 <a href={`tel:${settings.phone.replace(/\s+/g, "")}`} className="text-[#07283b] hover:underline">
                   {settings.phone}
                 </a>
@@ -38,7 +50,7 @@ export default async function ContactUsPage() {
             )}
             {settings?.email && (
               <p>
-                Email:{" "}
+                {dict.contactPage.email}{" "}
                 <a href={`mailto:${settings.email}`} className="text-[#07283b] hover:underline">
                   {settings.email}
                 </a>
@@ -55,7 +67,7 @@ export default async function ContactUsPage() {
             )}
           </div>
 
-          <h2 className="mt-8 text-lg font-semibold text-[#07283b]">Our offices</h2>
+          <h2 className="mt-8 text-lg font-semibold text-[#07283b]">{dict.contactPage.ourOffices}</h2>
           <div className="mt-4 space-y-4">
             {branches.map((office) => (
               <div key={office.id} className="rounded-2xl border border-slate-200 p-4">

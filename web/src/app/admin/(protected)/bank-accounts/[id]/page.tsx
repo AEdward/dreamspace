@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { query } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth";
 import { BankAccountForm } from "../BankAccountForm";
 import { updateBankAccount } from "../actions";
 
@@ -12,6 +13,7 @@ interface Row {
 }
 
 export default async function EditBankAccountPage({ params }: { params: Promise<{ id: string }> }) {
+  await requireAdmin();
   const { id } = await params;
   const rows = await query<Row[]>("SELECT * FROM bank_accounts WHERE id = ?", [Number(id)]);
   const row = rows[0];

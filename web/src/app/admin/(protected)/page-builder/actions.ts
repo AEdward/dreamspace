@@ -2,12 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 import { query } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth";
 import type { SectionKey } from "@/lib/types";
 
 export async function updatePageSections(
   page: string,
   sections: { key: SectionKey; visible: boolean }[]
 ): Promise<void> {
+  await requireAdmin();
   await Promise.all(
     sections.map((section, i) =>
       query(

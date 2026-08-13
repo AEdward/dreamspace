@@ -137,3 +137,38 @@ CREATE TABLE IF NOT EXISTS page_sections (
   visible BOOLEAN NOT NULL DEFAULT 1,
   UNIQUE KEY page_section (page, section_key)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Admin accounts. Replaces the old single shared ADMIN_PASSWORD env var login.
+CREATE TABLE IF NOT EXISTS admin_users (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  role VARCHAR(20) NOT NULL DEFAULT 'editor',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Amharic/Oromo overrides for DB-driven content. A missing row for a given
+-- (entity_type, entity_id, field, locale) means "fall back to the English
+-- value already stored on that row's own column".
+CREATE TABLE IF NOT EXISTS translations (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  entity_type VARCHAR(50) NOT NULL,
+  entity_id INT NOT NULL,
+  field VARCHAR(50) NOT NULL,
+  locale VARCHAR(5) NOT NULL,
+  value TEXT,
+  UNIQUE KEY entity_field_locale (entity_type, entity_id, field, locale)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- One row per page load, for the self-hosted analytics dashboard.
+CREATE TABLE IF NOT EXISTS pageviews (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  path VARCHAR(500) NOT NULL,
+  referrer VARCHAR(500),
+  locale VARCHAR(5) NOT NULL DEFAULT 'en',
+  visitor_hash VARCHAR(64),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE INDEX IF NOT EXISTS pageviews_created_at ON pageviews (created_at);
+CREATE INDEX IF NOT EXISTS pageviews_path ON pageviews (path);

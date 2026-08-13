@@ -1,9 +1,25 @@
+import type { Metadata } from "next";
 import { getSiteSettings, getValueProps, getPartners } from "@/lib/data";
+import { getLocale } from "@/lib/i18n/locale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 
 export const revalidate = 60;
 
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings(await getLocale());
+  const title = settings?.aboutHeading || `About ${settings?.siteName ?? "Dreamspace Realty"}`;
+  const description = settings?.aboutBody?.slice(0, 160) || settings?.heroHeadline || undefined;
+  return { title, description, alternates: { canonical: "/about-us" } };
+}
+
 export default async function AboutUsPage() {
-  const [settings, valueProps, partners] = await Promise.all([getSiteSettings(), getValueProps(), getPartners()]);
+  const locale = await getLocale();
+  const dict = getDictionary(locale);
+  const [settings, valueProps, partners] = await Promise.all([
+    getSiteSettings(locale),
+    getValueProps(locale),
+    getPartners(),
+  ]);
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-16">
@@ -35,7 +51,7 @@ export default async function AboutUsPage() {
 
       {partners.length > 0 && (
         <div className="mt-12">
-          <h2 className="text-lg font-semibold text-[#07283b]">Partners and sister companies</h2>
+          <h2 className="text-lg font-semibold text-[#07283b]">{dict.aboutPage.partners}</h2>
           <div className="mt-4 flex flex-wrap items-center gap-8">
             {partners.map((partner) =>
               partner.logoUrl ? (

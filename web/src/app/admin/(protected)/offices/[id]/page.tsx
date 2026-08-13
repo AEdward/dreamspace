@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { query } from "@/lib/db";
 import { OfficeForm } from "../OfficeForm";
 import { updateOffice } from "../actions";
+import { TranslationEditor } from "../../translations/TranslationEditor";
+import { getTranslationsFor } from "../../translations/actions";
 
 interface OfficeRow {
   id: number;
@@ -41,6 +43,19 @@ export default async function EditOfficePage({ params }: { params: Promise<{ id:
         action={boundAction}
         submitLabel="Save"
       />
+
+      <div className="mt-8 max-w-xl">
+        <h2 className="text-lg font-semibold text-[#07283b]">Amharic / Oromo overrides</h2>
+        <TranslationEditor
+          entityType="office"
+          entityId={row.id}
+          initial={await getTranslationsFor("office", row.id)}
+          fields={[
+            { name: "name", label: "Name" },
+            { name: "address", label: "Address", multiline: true },
+          ]}
+        />
+      </div>
     </div>
   );
 }

@@ -1,6 +1,13 @@
 "use strict";
 
 const mysql = require("mysql2/promise");
+const { randomBytes, scryptSync } = require("node:crypto");
+
+function hashPassword(password) {
+  const salt = randomBytes(16).toString("hex");
+  const hash = scryptSync(password, salt, 64).toString("hex");
+  return `${salt}:${hash}`;
+}
 
 async function main() {
   const connection = await mysql.createConnection({
@@ -304,6 +311,173 @@ async function main() {
     }
   }
   console.log(`  + page_sections seeded (${pageSections.length})`);
+
+  const [adminCount] = await connection.query("SELECT COUNT(*) AS count FROM admin_users");
+  if (adminCount[0].count === 0) {
+    const email = (process.env.ADMIN_EMAIL ?? "admin@dreamspacerbg.com").trim().toLowerCase();
+    const password = process.env.ADMIN_PASSWORD;
+    if (password) {
+      await connection.query(
+        "INSERT INTO admin_users (name, email, password_hash, role) VALUES (?, ?, ?, 'admin')",
+        ["Admin", email, hashPassword(password)]
+      );
+      console.log(`  + admin_users bootstrapped (${email}, from ADMIN_PASSWORD env var)`);
+    } else {
+      console.log("  ! admin_users is empty and ADMIN_PASSWORD is not set — no login will work until one is created");
+    }
+  } else {
+    console.log("  = admin_users already exists, skipping");
+  }
+
+  // Amharic/Oromo overrides for the site's default English content. These are
+  // machine-drafted starting points, not final copy — review with a native
+  // speaker before treating them as production-quality translations. Staff
+  // can also add/edit AM and OM text for any of this per-record in the admin
+  // panel at any time; a blank override there falls back to English.
+  async function seedTranslation(entityType, entityId, field, locale, value) {
+    await connection.query(
+      `INSERT INTO translations (entity_type, entity_id, field, locale, value)
+       VALUES (?, ?, ?, ?, ?)
+       ON DUPLICATE KEY UPDATE value = value`,
+      [entityType, entityId, field, locale, value]
+    );
+  }
+
+  const [settingsRows] = await connection.query("SELECT id FROM site_settings LIMIT 1");
+  const settingsId = settingsRows[0]?.id;
+  if (settingsId) {
+    const settingsTranslations = {
+      hero_headline: { am: "እውን እናደርገዋለን!", om: "Ni milkeessina!" },
+      popup_headline: {
+        am: "የተወሰነ ጊዜ ምዝገባ በመካሄድ ላይ ነው። ይቻኩሉ!",
+        om: "Galmeen yeroo murtaaʼe geggeeffamaa jira. Ariifadhaa!",
+      },
+      register_cta_label: { am: "አሁን ያስይዙ", om: "Amma Qabadhaa" },
+      about_heading: { am: "ስለ እኛ", om: "Waaʼee Keenya" },
+      contact_heading: { am: "ያግኙን", om: "Nu Qunnamaa" },
+    };
+    for (const [field, byLocale] of Object.entries(settingsTranslations)) {
+      for (const [locale, value] of Object.entries(byLocale)) {
+        await seedTranslation("site_settings", settingsId, field, locale, value);
+      }
+    }
+    console.log("  + site_settings translations seeded");
+  }
+
+  const valuePropTranslations = [
+    {
+      title: "Affordable housing development",
+      am: {
+        title: "ተመጣጣኝ የመኖሪያ ቤት ልማት",
+        description: "ተመጣጣኝ እና ጥራት ያለው የመኖሪያ ማህበረሰቦችን በእቅድ እና በፍጥነት እንገነባለን።",
+      },
+      om: {
+        title: "Misooma Manneen Jireenyaa Salphaa",
+        description:
+          "Jiraattota qulqullina qabaniifi gatii madaalawaa qaban karoorfamanii fi ariitiidhaan ijaarra.",
+      },
+    },
+    {
+      title: "Homeownership Solutions",
+      am: {
+        title: "የቤት ባለቤትነት መፍትሄዎች",
+        description:
+          "በተለዋዋጭ የፋይናንስ አማራጮች፣ የክፍያ እቅዶች፣ እና የህብረት ስራ ማህበር የቤት ሞዴሎች አማካኝነት ግለሰቦችና ቤተሰቦች የመጀመሪያ ቤታቸውን በቀላሉ እንዲያገኙ እንረዳለን።",
+      },
+      om: {
+        title: "Furmaata Qabeenya Mana",
+        description:
+          "Filannoo maallaqaa jijjiiramaa, karoora kaffaltii, fi moodeela manneen waldaa hojii gamtaa fayyadamuun, namootaa fi maatiin mana isaanii jalqabaa salphaatti akka argatan gargaarra.",
+      },
+    },
+    {
+      title: "Sustainable construction",
+      am: {
+        title: "ዘላቂ ግንባታ",
+        description: "ነገን መገንባት እናምናለን። ቤቶቻችን ለዘላቂነት የተነደፉ ሲሆን ለአካባቢ ተስማሚ ለመሆንም እንጥራለን።",
+      },
+      om: {
+        title: "Ijaarsa Itti Fufiinsa Qabu",
+        description:
+          "Boruu ijaaruutti ni amanna. Manneen keenya itti fufiinsaaf kan qophaaʼan yoo taʼu, naannoo eeguufis ni carraaqna.",
+      },
+    },
+    {
+      title: "Real estate investment opportunities",
+      am: {
+        title: "የሪልስቴት ኢንቨስትመንት እድሎች",
+        description: "ለግለሰቦችና ቡድኖች በጋራ ሀብት ለመገንባት የተዋቀሩ የሪልስቴት ኢንቨስትመንት ጥቅሎችን እናቀርባለን።",
+      },
+      om: {
+        title: "Carraa Investimentii Qabeenya Dhaabbii",
+        description:
+          "Namootaa fi garee qabeenya waliin ijaaruu barbaadaniif paakeejii investimentii qabeenya dhaabbii kan qindaaʼe ni dhiyeessina.",
+      },
+    },
+    {
+      title: "Land development and property management",
+      am: {
+        title: "የመሬት ልማት እና የንብረት አስተዳደር",
+        description:
+          "ከመሬት ግዢ ጀምሮ እስከ ማህበረሰብ ዕቅድ እና የንብረት አስተዳደር ድረስ፣ ዘላቂ እርካታን የሚያረጋግጡ ሙሉ መፍትሄዎችን እናቀርባለን።",
+      },
+      om: {
+        title: "Misooma Lafaa fi Bulchiinsa Qabeenyaa",
+        description:
+          "Bittaa lafaa irraa kaasee hanga karoora hawaasaa fi bulchiinsa qabeenyaatti, furmaata guutuu gammachuu dheeraa mirkaneessu ni dhiyeessina.",
+      },
+    },
+  ];
+  for (const vp of valuePropTranslations) {
+    const [rows] = await connection.query("SELECT id FROM value_props WHERE title = ?", [vp.title]);
+    const id = rows[0]?.id;
+    if (!id) continue;
+    await seedTranslation("value_prop", id, "title", "am", vp.am.title);
+    await seedTranslation("value_prop", id, "description", "am", vp.am.description);
+    await seedTranslation("value_prop", id, "title", "om", vp.om.title);
+    await seedTranslation("value_prop", id, "description", "om", vp.om.description);
+  }
+  console.log("  + value_props translations seeded");
+
+  const unitTypeTranslations = [
+    { name: "1 Bed Room", am: "1 መኝታ ክፍል", om: "Kutaa Ciisichaa 1" },
+    { name: "2 Bed Room", am: "2 መኝታ ክፍል", om: "Kutaalee Ciisichaa 2" },
+    { name: "3 Bed Room", am: "3 መኝታ ክፍል", om: "Kutaalee Ciisichaa 3" },
+  ];
+  for (const ut of unitTypeTranslations) {
+    const [rows] = await connection.query("SELECT id FROM unit_types WHERE name = ?", [ut.name]);
+    const id = rows[0]?.id;
+    if (!id) continue;
+    await seedTranslation("unit_type", id, "name", "am", ut.am);
+    await seedTranslation("unit_type", id, "name", "om", ut.om);
+  }
+  console.log("  + unit_types translations seeded");
+
+  const postTranslations = [
+    {
+      slug: "renting-vs-buying-in-addis-which-one-is-right-for-you",
+      am: { title: "ኪራይ ወይስ ግዢ በአዲስ አበባ፦ የትኛው ለእርስዎ ይስማማል?" },
+      om: { title: "Kiraa moo Bituu Addis Ababaa keessatti: Kamtu Siif Mala?" },
+    },
+    {
+      slug: "home-loans-in-ethiopia-how-to-finance-your-dream-home",
+      am: { title: "የቤት ብድር በኢትዮጵያ፦ የህልም ቤትዎን እንዴት መደገፍ እንደሚቻል" },
+      om: { title: "Liqii Manaa Itoophiyaa keessatti: Mana Abjuu Keessanii Akkamitti Maallaqeessuu" },
+    },
+    {
+      slug: "step-by-step-guide-to-buying-your-first-home-in-ethiopia",
+      am: { title: "የመጀመሪያ ቤትዎን በኢትዮጵያ ለመግዛት ደረጃ በደረጃ መመሪያ" },
+      om: { title: "Qajeelfama Tarree Tarreen Mana Jalqabaa Keessanii Itoophiyaa Keessatti Bituuf" },
+    },
+  ];
+  for (const post of postTranslations) {
+    const [rows] = await connection.query("SELECT id FROM posts WHERE slug = ?", [post.slug]);
+    const id = rows[0]?.id;
+    if (!id) continue;
+    await seedTranslation("post", id, "title", "am", post.am.title);
+    await seedTranslation("post", id, "title", "om", post.om.title);
+  }
+  console.log("  + posts translations seeded");
 
   console.log("\nSeed complete.");
   await connection.end();

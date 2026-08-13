@@ -1,4 +1,5 @@
 import { query } from "./db";
+import type { Locale } from "./i18n/locale";
 import type {
   SiteSettings,
   ValueProp,
@@ -12,6 +13,34 @@ import type {
   SectionKey,
 } from "./types";
 
+interface TranslationRow {
+  entity_id: number;
+  field: string;
+  value: string | null;
+}
+
+/** entityType/locale -> { "id:field": value }. A missing entry means "fall back to the English column". */
+async function loadTranslationMap(entityType: string, locale: Locale): Promise<Map<string, string>> {
+  const map = new Map<string, string>();
+  if (locale === "en") return map;
+  try {
+    const rows = await query<TranslationRow[]>(
+      "SELECT entity_id, field, value FROM translations WHERE entity_type = ? AND locale = ?",
+      [entityType, locale]
+    );
+    for (const row of rows) {
+      if (row.value) map.set(`${row.entity_id}:${row.field}`, row.value);
+    }
+  } catch {
+    // translations table may not exist yet on an un-migrated DB
+  }
+  return map;
+}
+
+function translate<T extends string | null>(map: Map<string, string>, id: number, field: string, fallback: T): T {
+  return (map.get(`${id}:${field}`) as T) ?? fallback;
+}
+
 export const DEFAULT_SECTION_ORDER: SectionKey[] = [
   "hero",
   "value_props",
@@ -24,6 +53,7 @@ export const DEFAULT_SECTION_ORDER: SectionKey[] = [
 ];
 
 interface SiteSettingsRow {
+  id: number;
   site_name: string;
   hero_headline: string;
   hero_subheadline: string | null;
@@ -53,23 +83,25 @@ interface SiteSettingsRow {
   contact_intro: string | null;
 }
 
-export async function getSiteSettings(): Promise<SiteSettings | null> {
+export async function getSiteSettings(locale: Locale = "en"): Promise<SiteSettings | null> {
   try {
     const rows = await query<SiteSettingsRow[]>("SELECT * FROM site_settings LIMIT 1");
     const row = rows[0];
     if (!row) return null;
+    const t = await loadTranslationMap("site_settings", locale);
+    const id = row.id;
     return {
       siteName: row.site_name,
-      heroHeadline: row.hero_headline,
-      heroSubheadline: row.hero_subheadline,
+      heroHeadline: translate(t, id, "hero_headline", row.hero_headline),
+      heroSubheadline: translate(t, id, "hero_subheadline", row.hero_subheadline),
       heroImageUrl: row.hero_image_url,
       logoUrl: row.logo_url,
       phone: row.phone,
       email: row.email,
       secondaryEmail: row.secondary_email,
-      registerCtaLabel: row.register_cta_label,
+      registerCtaLabel: translate(t, id, "register_cta_label", row.register_cta_label),
       popupEnabled: !!row.popup_enabled,
-      popupHeadline: row.popup_headline,
+      popupHeadline: translate(t, id, "popup_headline", row.popup_headline),
       footerCredit: row.footer_credit,
       footerCreditUrl: row.footer_credit_url,
       statsEnabled: !!row.stats_enabled,
@@ -80,10 +112,10 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
         { value: row.stat4_value, label: row.stat4_label },
       ],
       maintenanceMode: !!row.maintenance_mode,
-      aboutHeading: row.about_heading,
-      aboutBody: row.about_body,
-      contactHeading: row.contact_heading,
-      contactIntro: row.contact_intro,
+      aboutHeading: translate(t, id, "about_heading", row.about_heading),
+      aboutBody: translate(t, id, "about_body", row.about_body),
+      contactHeading: translate(t, id, "contact_heading", row.contact_heading),
+      contactIntro: translate(t, id, "contact_intro", row.contact_intro),
     };
   } catch {
     return null;
@@ -96,10 +128,15 @@ interface ValuePropRow {
   description: string;
 }
 
-export async function getValueProps(): Promise<ValueProp[]> {
+export async function getValueProps(locale: Locale = "en"): Promise<ValueProp[]> {
   try {
     const rows = await query<ValuePropRow[]>("SELECT id, title, description FROM value_props ORDER BY sort_order ASC");
-    return rows;
+    const t = await loadTranslationMap("value_prop", locale);
+    return rows.map((row) => ({
+      id: row.id,
+      title: translate(t, row.id, "title", row.title),
+      description: translate(t, row.id, "description", row.description),
+    }));
   } catch {
     return [];
   }
@@ -121,12 +158,13 @@ interface UnitTypeRow {
   image_url: string | null;
 }
 
-export async function getUnitTypes(): Promise<UnitType[]> {
+export async function getUnitTypes(locale: Locale = "en"): Promise<UnitType[]> {
   try {
     const rows = await query<UnitTypeRow[]>("SELECT * FROM unit_types ORDER BY sort_order ASC");
+    const t = await loadTranslationMap("unit_type", locale);
     return rows.map((row) => ({
       id: row.id,
-      name: row.name,
+      name: translate(t, row.id, "name", row.name),
       sqm: Number(row.sqm),
       bedrooms: row.bedrooms,
       bathrooms: row.bathrooms,
@@ -158,14 +196,15 @@ interface PhoneRow {
   number: string;
 }
 
-export async function getOffices(): Promise<Office[]> {
+export async function getOffices(locale: Locale = "en"): Promise<Office[]> {
   try {
     const offices = await query<OfficeRow[]>("SELECT * FROM offices ORDER BY sort_order ASC");
     const phones = await query<PhoneRow[]>("SELECT * FROM office_phones ORDER BY sort_order ASC");
+    const t = await loadTranslationMap("office", locale);
     return offices.map((office) => ({
       id: office.id,
-      name: office.name,
-      address: office.address,
+      name: translate(t, office.id, "name", office.name),
+      address: translate(t, office.id, "address", office.address),
       isConstructionSite: !!office.is_construction_site,
       phones: phones
         .filter((p) => p.office_id === office.id)
@@ -204,13 +243,13 @@ interface PostRow {
   published_date: string;
 }
 
-function mapPost(row: PostRow): Post {
+function mapPost(row: PostRow, t: Map<string, string>): Post {
   return {
     id: row.id,
-    title: row.title,
+    title: translate(t, row.id, "title", row.title),
     slug: row.slug,
-    excerpt: row.excerpt,
-    content: row.content,
+    excerpt: translate(t, row.id, "excerpt", row.excerpt),
+    content: translate(t, row.id, "content", row.content),
     coverImageUrl: row.cover_image_url,
     author: row.author,
     category: row.category,
@@ -218,19 +257,22 @@ function mapPost(row: PostRow): Post {
   };
 }
 
-export async function getPosts(limit = 3): Promise<Post[]> {
+export async function getPosts(limit = 3, locale: Locale = "en"): Promise<Post[]> {
   try {
     const rows = await query<PostRow[]>("SELECT * FROM posts ORDER BY published_date DESC LIMIT ?", [limit]);
-    return rows.map(mapPost);
+    const t = await loadTranslationMap("post", locale);
+    return rows.map((row) => mapPost(row, t));
   } catch {
     return [];
   }
 }
 
-export async function getPostBySlug(slug: string): Promise<Post | null> {
+export async function getPostBySlug(slug: string, locale: Locale = "en"): Promise<Post | null> {
   try {
     const rows = await query<PostRow[]>("SELECT * FROM posts WHERE slug = ? LIMIT 1", [slug]);
-    return rows[0] ? mapPost(rows[0]) : null;
+    if (!rows[0]) return null;
+    const t = await loadTranslationMap("post", locale);
+    return mapPost(rows[0], t);
   } catch {
     return null;
   }

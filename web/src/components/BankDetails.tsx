@@ -2,8 +2,9 @@
 
 import { motion } from "framer-motion";
 import type { BankAccount } from "@/lib/types";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
-export function BankDetails({ accounts }: { accounts: BankAccount[] }) {
+export function BankDetails({ accounts, dict }: { accounts: BankAccount[]; dict: Dictionary }) {
   if (accounts.length === 0) return null;
 
   return (
@@ -15,11 +16,9 @@ export function BankDetails({ accounts }: { accounts: BankAccount[] }) {
         transition={{ duration: 0.5 }}
         className="text-3xl font-bold tracking-tight text-[#07283b] sm:text-4xl"
       >
-        Bank details
+        {dict.bank.heading}
       </motion.h2>
-      <p className="mt-3 max-w-xl text-slate-500">
-        Send registration/service fee and price payments to these accounts.
-      </p>
+      <p className="mt-3 max-w-xl text-slate-500">{dict.bank.sub}</p>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -31,9 +30,9 @@ export function BankDetails({ accounts }: { accounts: BankAccount[] }) {
         <table className="w-full min-w-[560px] border-collapse text-left text-sm">
           <thead>
             <tr className="bg-[#07283b] text-white">
-              <th className="px-5 py-4 font-semibold">Bank</th>
-              <th className="px-5 py-4 font-semibold">Registration & service fee account</th>
-              <th className="px-5 py-4 font-semibold">Price payment account</th>
+              <th className="px-5 py-4 font-semibold">{dict.bank.bank}</th>
+              <th className="px-5 py-4 font-semibold">{dict.bank.regAccount}</th>
+              <th className="px-5 py-4 font-semibold">{dict.bank.priceAccount}</th>
             </tr>
           </thead>
           <tbody>

@@ -2,8 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 import { query } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth";
 
 export async function updateSiteSettings(_prevState: string | null, formData: FormData): Promise<string | null> {
+  await requireAdmin();
   const get = (key: string) => String(formData.get(key) ?? "").trim();
 
   const existing = await query<{ id: number }[]>("SELECT id FROM site_settings LIMIT 1");

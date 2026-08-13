@@ -2,10 +2,11 @@
 
 import { motion } from "framer-motion";
 import type { UnitType } from "@/lib/types";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 import { formatCurrency } from "@/lib/format";
 import { UnitModelLoader } from "@/components/three/UnitModelLoader";
 
-export function PricingTable({ units }: { units: UnitType[] }) {
+export function PricingTable({ units, dict }: { units: UnitType[]; dict: Dictionary }) {
   if (units.length === 0) return null;
 
   return (
@@ -18,12 +19,8 @@ export function PricingTable({ units }: { units: UnitType[] }) {
           transition={{ duration: 0.6 }}
           className="text-center"
         >
-          <h2 className="text-3xl font-bold tracking-tight text-[#07283b] sm:text-4xl">
-            Types and distribution of houses
-          </h2>
-          <p className="mx-auto mt-3 max-w-xl text-slate-500">
-            Drag to rotate each model and explore the scale of every unit type.
-          </p>
+          <h2 className="text-3xl font-bold tracking-tight text-[#07283b] sm:text-4xl">{dict.pricing.heading}</h2>
+          <p className="mx-auto mt-3 max-w-xl text-slate-500">{dict.pricing.sub}</p>
         </motion.div>
 
         <div className="mt-14 grid gap-8 lg:grid-cols-3">
@@ -43,25 +40,29 @@ export function PricingTable({ units }: { units: UnitType[] }) {
               <div className="flex flex-1 flex-col p-8">
                 <h3 className="text-xl font-bold text-[#07283b]">{unit.name}</h3>
                 <p className="mt-1 text-sm text-slate-500">
-                  {unit.sqm} Sqm &middot; {unit.bedrooms} Beds &middot; {unit.bathrooms} Baths
+                  {unit.sqm} {dict.pricing.sqm} &middot; {unit.bedrooms} {dict.pricing.beds} &middot; {unit.bathrooms}{" "}
+                  {dict.pricing.baths}
                 </p>
 
                 <dl className="mt-6 space-y-3 text-sm">
-                  <Row label="Down payment" value={formatCurrency(unit.downPayment, unit.currency)} />
-                  <Row label="Service fee" value={formatCurrency(unit.serviceFee, unit.currency)} />
-                  <Row label="Monthly savings" value={formatCurrency(unit.monthlySavings, unit.currency)} />
+                  <Row label={dict.pricing.downPayment} value={formatCurrency(unit.downPayment, unit.currency)} />
+                  <Row label={dict.pricing.serviceFee} value={formatCurrency(unit.serviceFee, unit.currency)} />
                   <Row
-                    label="Monthly service fee"
+                    label={dict.pricing.monthlySavings}
+                    value={formatCurrency(unit.monthlySavings, unit.currency)}
+                  />
+                  <Row
+                    label={dict.pricing.monthlyServiceFee}
                     value={formatCurrency(unit.monthlyServiceFee, unit.currency)}
                   />
                   <Row
-                    label="Final service fee after the draw"
+                    label={dict.pricing.finalServiceFee}
                     value={formatCurrency(unit.finalServiceFeeAfterDraw, unit.currency)}
                   />
                 </dl>
 
                 <div className="mt-6 border-t border-slate-200 pt-4 text-sm font-semibold text-[#07283b]">
-                  Total construction cost: {formatCurrency(unit.totalConstructionCost, unit.currency)}
+                  {dict.pricing.totalCost} {formatCurrency(unit.totalConstructionCost, unit.currency)}
                 </div>
               </div>
             </motion.div>

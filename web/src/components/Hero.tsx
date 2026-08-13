@@ -3,10 +3,11 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import type { SiteSettings } from "@/lib/types";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 import { HeroSceneLoader } from "@/components/three/HeroSceneLoader";
 import { BookingModal } from "@/components/BookingModal";
 
-export function Hero({ settings }: { settings: SiteSettings | null }) {
+export function Hero({ settings, dict }: { settings: SiteSettings | null; dict: Dictionary }) {
   const heroUrl = settings?.heroImageUrl ?? "/brand/hero.jpg";
   const [bookingOpen, setBookingOpen] = useState(false);
 
@@ -57,7 +58,7 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
                 href={`tel:${settings.phone.replace(/\s+/g, "")}`}
                 className="rounded-full border border-white/30 px-7 py-3.5 font-semibold backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-white/60 hover:bg-white/10"
               >
-                Call us: {settings.phone}
+                {dict.hero.callUs} {settings.phone}
               </a>
             )}
           </motion.div>
@@ -74,7 +75,7 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
         </motion.div>
       </div>
 
-      <BookingModal open={bookingOpen} onClose={() => setBookingOpen(false)} />
+      <BookingModal open={bookingOpen} onClose={() => setBookingOpen(false)} dict={dict} />
     </section>
   );
 }

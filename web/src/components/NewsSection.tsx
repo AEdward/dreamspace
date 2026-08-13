@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import type { Post } from "@/lib/types";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
-export function NewsSection({ posts, heading = "Latest news" }: { posts: Post[]; heading?: string }) {
+export function NewsSection({ posts, heading, dict }: { posts: Post[]; heading?: string; dict: Dictionary }) {
   if (posts.length === 0) return null;
+  const title = heading ?? dict.news.latest;
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-24">
@@ -16,7 +18,7 @@ export function NewsSection({ posts, heading = "Latest news" }: { posts: Post[];
         transition={{ duration: 0.5 }}
         className="text-3xl font-bold tracking-tight text-[#07283b] sm:text-4xl"
       >
-        {heading}
+        {title}
       </motion.h2>
 
       <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">

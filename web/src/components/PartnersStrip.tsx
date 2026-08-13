@@ -2,15 +2,16 @@
 
 import { motion } from "framer-motion";
 import type { Partner } from "@/lib/types";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
-export function PartnersStrip({ partners }: { partners: Partner[] }) {
+export function PartnersStrip({ partners, dict }: { partners: Partner[]; dict: Dictionary }) {
   if (partners.length === 0) return null;
 
   return (
     <section className="border-y border-slate-200 bg-white py-16">
       <div className="mx-auto max-w-7xl px-6">
         <h2 className="text-center text-sm font-semibold uppercase tracking-wide text-slate-500">
-          Partners and sister companies
+          {dict.sections.partners}
         </h2>
 
         <motion.div

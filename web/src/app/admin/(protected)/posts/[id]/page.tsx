@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { query } from "@/lib/db";
 import { PostForm } from "../PostForm";
 import { updatePost } from "../actions";
+import { TranslationEditor } from "../../translations/TranslationEditor";
+import { getTranslationsFor } from "../../translations/actions";
 
 interface Row {
   id: number;
@@ -36,6 +38,20 @@ export default async function EditPostPage({ params }: { params: Promise<{ id: s
         action={boundAction}
         submitLabel="Save"
       />
+
+      <div className="mt-8 max-w-xl">
+        <h2 className="text-lg font-semibold text-[#07283b]">Amharic / Oromo overrides</h2>
+        <TranslationEditor
+          entityType="post"
+          entityId={row.id}
+          initial={await getTranslationsFor("post", row.id)}
+          fields={[
+            { name: "title", label: "Title" },
+            { name: "excerpt", label: "Excerpt", multiline: true },
+            { name: "content", label: "Content", multiline: true },
+          ]}
+        />
+      </div>
     </div>
   );
 }
