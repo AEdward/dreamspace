@@ -85,22 +85,6 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings | null }
         <input name="popup_headline" defaultValue={settings?.popupHeadline ?? ""} className={inputClass} />
       </label>
 
-      <div className="grid grid-cols-2 gap-4">
-        <label className={labelClass}>
-          Footer credit
-          <input name="footer_credit" defaultValue={settings?.footerCredit ?? ""} className={inputClass} />
-        </label>
-        <label className={labelClass}>
-          Footer credit link
-          <input
-            name="footer_credit_url"
-            defaultValue={settings?.footerCreditUrl ?? ""}
-            placeholder="https://..."
-            className={inputClass}
-          />
-        </label>
-      </div>
-
       <div className="border-t border-slate-100 pt-5">
         <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
           <input type="checkbox" name="stats_enabled" defaultChecked={settings?.statsEnabled ?? true} className="h-4 w-4" />

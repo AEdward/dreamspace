@@ -65,8 +65,6 @@ interface SiteSettingsRow {
   register_cta_label: string;
   popup_enabled: number;
   popup_headline: string;
-  footer_credit: string;
-  footer_credit_url: string | null;
   stats_enabled: number;
   stat1_value: string;
   stat1_label: string;
@@ -102,8 +100,6 @@ export async function getSiteSettings(locale: Locale = "en"): Promise<SiteSettin
       registerCtaLabel: translate(t, id, "register_cta_label", row.register_cta_label),
       popupEnabled: !!row.popup_enabled,
       popupHeadline: translate(t, id, "popup_headline", row.popup_headline),
-      footerCredit: row.footer_credit,
-      footerCreditUrl: row.footer_credit_url,
       statsEnabled: !!row.stats_enabled,
       stats: [
         { value: row.stat1_value, label: row.stat1_label },

@@ -43,21 +43,14 @@ export async function Footer({ settings, offices }: { settings: SiteSettings | n
           <p>
             &copy; {new Date().getFullYear()} {settings?.siteName ?? "Dreamspace Realty"}. {dict.footer.rights}
           </p>
-          {settings?.footerCredit &&
-            (settings.footerCreditUrl ? (
-              <a
-                href={settings.footerCreditUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm font-medium text-white/80 underline underline-offset-2 hover:text-white"
-              >
-                {dict.footer.developedBy} {settings.footerCredit}
-              </a>
-            ) : (
-              <p className="text-sm font-medium text-white/80">
-                {dict.footer.developedBy} {settings.footerCredit}
-              </p>
-            ))}
+          <a
+            href="https://meskedaytech.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-medium text-white/80 underline underline-offset-2 hover:text-white"
+          >
+            {dict.footer.developedBy} Meskeday Technologies Group
+          </a>
         </div>
       </div>
     </footer>
