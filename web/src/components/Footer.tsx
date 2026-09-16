@@ -44,12 +44,12 @@ export async function Footer({ settings, offices }: { settings: SiteSettings | n
             &copy; {new Date().getFullYear()} {settings?.siteName ?? "Dreamspace Realty"}. {dict.footer.rights}
           </p>
           <a
-            href="https://meskedaytech.com"
+            href="https://paraibatech.com"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm font-medium text-white/80 underline underline-offset-2 hover:text-white"
           >
-            {dict.footer.developedBy} Meskeday Technologies Group
+            {dict.footer.developedBy} Paraiba Technology PLC
           </a>
         </div>
       </div>
